@@ -1,0 +1,37 @@
+
+name: 'dbt_observability_marts'
+version: '1.0.0'
+
+profile: 'dbt_observability_marts'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+vars:
+  "dbt_observability:tracking_enabled": false
+  "dbt_observability:marts_enabled": true
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  dbt_observability_marts:
+    +materialized: table
+    +file_format: delta
+    +schema: observability
+    sources:
+      +materialized: incremental
+      +on_schema_change: append_new_columns
+      +full_refresh: false
+    +access: public
+    staging:
+      +schema: observability
+      +materialized: view
+    reporting:
+      +schema: observability
+      +materialized: table
