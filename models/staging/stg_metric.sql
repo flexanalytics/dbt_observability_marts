@@ -18,4 +18,4 @@ select
     meta,
     depends_on_nodes,
     description
-from {{ ref('metrics__unioned') }}
+from {{ ref('metrics') }}

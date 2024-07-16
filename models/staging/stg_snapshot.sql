@@ -15,4 +15,4 @@ select
     path,
     checksum,
     strategy
-from {{ ref('snapshots__unioned') }}
+from {{ ref('snapshots') }}

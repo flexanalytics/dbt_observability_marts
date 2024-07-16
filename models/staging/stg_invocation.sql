@@ -22,4 +22,4 @@ select
     dbt_cloud_run_reason,
     env_vars,
     dbt_vars
-from {{ ref('invocations__unioned') }}
+from {{ ref('invocations') }}

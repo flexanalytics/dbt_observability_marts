@@ -19,4 +19,4 @@ select
     meta,
     description,
     total_rowcount
-from {{ ref('models__unioned') }}
+from {{ ref('models') }}

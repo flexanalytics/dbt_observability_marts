@@ -13,4 +13,4 @@ select
     test_path,
     tags,
     test_metadata
-from {{ ref('tests__unioned') }}
+from {{ ref('tests') }}

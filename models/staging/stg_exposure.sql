@@ -16,4 +16,4 @@ select
     url,
     package_name,
     depends_on_nodes
-from {{ ref('exposures__unioned') }}
+from {{ ref('exposures') }}

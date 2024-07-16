@@ -16,4 +16,4 @@ select
     loaded_at_field,
     freshness,
     total_rowcount
-from {{ ref('sources__unioned') }}
+from {{ ref('sources') }}

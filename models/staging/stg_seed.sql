@@ -13,4 +13,4 @@ select
     package_name,
     path,
     checksum
-from {{ ref('seeds__unioned') }}
+from {{ ref('seeds') }}

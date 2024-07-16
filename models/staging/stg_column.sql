@@ -22,4 +22,4 @@ select
     row_stdev,
     is_metric,
     column_values
-from {{ ref('columns__unioned') }}
+from {{ ref('columns') }}

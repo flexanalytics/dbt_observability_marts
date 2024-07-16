@@ -17,4 +17,4 @@ select
     schema_name,
     name,
     resource_type
-from {{ ref('all_executions__unioned') }}
+from {{ ref('all_executions') }}
