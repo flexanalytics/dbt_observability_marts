@@ -1,6 +1,6 @@
 
 name: 'dbt_observability_marts'
-version: '1.0.0'
+version: '0.0.1'
 
 profile: 'dbt_observability_marts'
 
@@ -10,10 +10,6 @@ test-paths: ["tests"]
 seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
-
-vars:
-  "dbt_observability:tracking_enabled": false
-  "dbt_observability:marts_enabled": true
 
 clean-targets:
   - "target"
@@ -35,3 +31,9 @@ models:
     reporting:
       +schema: observability
       +materialized: table
+
+dispatch:
+  - macro_namespace: dbt
+    search_order: ['dbt_observability_marts', 'dbt']
+  - macro_namespace: dbt_utils
+    search_order: ['dbt_observability_marts', 'dbt_utils']
