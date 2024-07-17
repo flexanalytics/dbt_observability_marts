@@ -1,21 +1,33 @@
 {{
     config(
-        enabled=var('dbt_observability:marts_enabled', true)
+        enabled=var('dbt_observability:marts_enabled', true),
+        materialized='incremental'
     )
 }}
 with
 
     _executions as (
         select
-            *,
+            command_invocation_id,
+            run_started_at,
+            name,
             lag(run_started_at) over (partition by node_id order by run_started_at) as previous_run_started_at,
             lead(run_started_at) over (partition by node_id order by run_started_at) as next_run_started_at
         from {{ ref('stg_execution') }}
+        {% if is_incremental() %}
+
+        where run_started_at >= (select coalesce(max(run_started_at),'1900-01-01') from {{ ref('stg_execution') }} )
+
+        {% endif %}
+
     ),
 
     cur as (
         select
-            cols.*,
+            cols.node_id,
+            cols.command_invocation_id,
+            cols.column_name,
+            cols.data_type,
             excs.run_started_at,
             excs.previous_run_started_at,
             excs.next_run_started_at
@@ -25,7 +37,10 @@ with
 
     pre as (
         select
-            cols.*,
+            cols.node_id,
+            cols.command_invocation_id,
+            cols.column_name,
+            cols.data_type,
             excs.run_started_at,
             excs.previous_run_started_at,
             excs.next_run_started_at
@@ -35,7 +50,10 @@ with
 
     cur_models as (
         select
-            mdls.*,
+            mdls.node_id,
+            mdls.command_invocation_id,
+            mdls.run_started_at,
+            mdls.name,
             excs.previous_run_started_at,
             excs.next_run_started_at
         from {{ ref('stg_model') }} as mdls
@@ -44,7 +62,10 @@ with
 
     pre_models as (
         select
-            mdls.*,
+            mdls.node_id,
+            mdls.command_invocation_id,
+            mdls.run_started_at,
+            mdls.name,
             excs.previous_run_started_at,
             excs.next_run_started_at
         from {{ ref('stg_model') }} as mdls
@@ -53,7 +74,10 @@ with
 
     cur_seeds as (
         select
-            seeds.*,
+            seeds.node_id,
+            seeds.command_invocation_id,
+            seeds.run_started_at,
+            seeds.name,
             excs.previous_run_started_at,
             excs.next_run_started_at
         from {{ ref('stg_seed') }} as seeds
@@ -62,7 +86,10 @@ with
 
     pre_seeds as (
         select
-            seeds.*,
+            seeds.node_id,
+            seeds.command_invocation_id,
+            seeds.run_started_at,
+            seeds.name,
             excs.previous_run_started_at,
             excs.next_run_started_at
         from {{ ref('stg_seed') }} as seeds
@@ -71,7 +98,10 @@ with
 
     cur_sources as (
         select
-            sources.*,
+            sources.node_id,
+            sources.command_invocation_id,
+            sources.name,
+            sources.run_started_at,
             excs.previous_run_started_at,
             excs.next_run_started_at
         from {{ ref('stg_source') }} as sources
@@ -80,7 +110,10 @@ with
 
     pre_sources as (
         select
-            sources.*,
+            sources.node_id,
+            sources.command_invocation_id,
+            sources.name,
+            sources.run_started_at,
             excs.previous_run_started_at,
             excs.next_run_started_at
         from {{ ref('stg_source') }} as sources
@@ -89,7 +122,10 @@ with
 
     cur_snapshots as (
         select
-            snaps.*,
+            snaps.node_id,
+            snaps.command_invocation_id,
+            snaps.name,
+            snaps.run_started_at,
             excs.previous_run_started_at,
             excs.next_run_started_at
         from {{ ref('stg_snapshot') }} as snaps
@@ -98,7 +134,10 @@ with
 
     pre_snapshots as (
         select
-            snaps.*,
+            snaps.node_id,
+            snaps.command_invocation_id,
+            snaps.name,
+            snaps.run_started_at,
             excs.previous_run_started_at,
             excs.next_run_started_at
         from {{ ref('stg_snapshot') }} as snaps
