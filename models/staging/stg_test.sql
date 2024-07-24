@@ -3,6 +3,7 @@
         enabled=var('dbt_observability:marts_enabled', true)
     )
 }}
+{% set ref_union = (var('dbt_observability:objects', none) is not none) %}
 select
     command_invocation_id,
     node_id,
@@ -13,4 +14,9 @@ select
     test_path,
     tags,
     test_metadata
-from {{ ref('tests') }}
+{% if ref_union %}
+from {{ ref('dbt_observability_marts', 'tests') }}
+{% else %}
+from {{ ref('dbt_observability', 'tests') }}
+{% endif %}
+

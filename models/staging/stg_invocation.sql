@@ -3,6 +3,7 @@
         enabled=var('dbt_observability:marts_enabled', true)
     )
 }}
+{% set ref_union = (var('dbt_observability:objects', none) is not none) %}
 select
     command_invocation_id,
     dbt_version,
@@ -22,4 +23,9 @@ select
     dbt_cloud_run_reason,
     env_vars,
     dbt_vars
-from {{ ref('invocations') }}
+{% if ref_union %}
+from {{ ref('dbt_observability_marts', 'invocations') }}
+{% else %}
+from {{ ref('dbt_observability', 'invocations') }}
+{% endif %}
+
