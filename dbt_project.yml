@@ -26,6 +26,9 @@ models:
     staging:
       +schema: observability
       +materialized: view
+    intermediate:
+      +schema: observability
+      +materialized: view
     reporting:
       +schema: observability
       +materialized: table
