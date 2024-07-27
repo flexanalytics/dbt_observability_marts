@@ -16,14 +16,14 @@ with
         from {{ ref('stg_execution') }}
         {% if is_incremental() %}
 
-        where run_started_at >= (select coalesce(max(run_started_at),'1900-01-01') from {{ this }} )
+        where run_started_at >= (select coalesce(max(detected_at),'1900-01-01') from {{ this }} )
 
         {% endif %}
 
     ),
 
     cur as (
-        select
+        select distinct
             cols.node_id,
             cols.command_invocation_id,
             cols.column_name,
@@ -36,7 +36,7 @@ with
     ),
 
     pre as (
-        select
+        select distinct
             cols.node_id,
             cols.command_invocation_id,
             cols.column_name,
@@ -49,7 +49,7 @@ with
     ),
 
     cur_models as (
-        select
+        select distinct
             mdls.node_id,
             mdls.command_invocation_id,
             mdls.run_started_at,
@@ -61,7 +61,7 @@ with
     ),
 
     pre_models as (
-        select
+        select distinct
             mdls.node_id,
             mdls.command_invocation_id,
             mdls.run_started_at,
@@ -73,7 +73,7 @@ with
     ),
 
     cur_seeds as (
-        select
+        select distinct
             seeds.node_id,
             seeds.command_invocation_id,
             seeds.run_started_at,
@@ -85,7 +85,7 @@ with
     ),
 
     pre_seeds as (
-        select
+        select distinct
             seeds.node_id,
             seeds.command_invocation_id,
             seeds.run_started_at,
@@ -97,7 +97,7 @@ with
     ),
 
     cur_sources as (
-        select
+        select distinct
             sources.node_id,
             sources.command_invocation_id,
             sources.name,
@@ -109,7 +109,7 @@ with
     ),
 
     pre_sources as (
-        select
+        select distinct
             sources.node_id,
             sources.command_invocation_id,
             sources.name,
@@ -121,7 +121,7 @@ with
     ),
 
     cur_snapshots as (
-        select
+        select distinct
             snaps.node_id,
             snaps.command_invocation_id,
             snaps.name,
@@ -133,7 +133,7 @@ with
     ),
 
     pre_snapshots as (
-        select
+        select distinct
             snaps.node_id,
             snaps.command_invocation_id,
             snaps.name,
