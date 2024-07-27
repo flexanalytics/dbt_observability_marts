@@ -16,7 +16,7 @@ with
         from {{ ref('stg_execution') }}
         {% if is_incremental() %}
 
-        where run_started_at >= (select coalesce(max(run_started_at),'1900-01-01') from {{ ref('stg_execution') }} )
+        where run_started_at >= (select coalesce(max(run_started_at),'1900-01-01') from {{ this }} )
 
         {% endif %}
 
