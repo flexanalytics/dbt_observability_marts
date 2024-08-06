@@ -22,7 +22,8 @@ with
             materialization,
             tags,
             meta,
-            description
+            description,
+            total_rowcount
         from {{ ref('int_model') }}
     ),
 
@@ -70,6 +71,7 @@ with
             models.tags,
             models.meta,
             models.description,
+            models.total_rowcount,
             case when untested_models.model_key is null then 'Yes' else 'No' end as is_tested
         from models
         left outer join untested_models on models.model_key = untested_models.model_key
