@@ -35,7 +35,7 @@ rowdiff as (
             cast(current_rowcount as numeric(19, 6))
             - cast(previous_rowcount as numeric(19, 6))
         )
-        / cast(previous_rowcount as numeric(19, 6)) as rowcount_diff_pct
+        / nullif(cast(previous_rowcount as numeric(19, 6)), 0) as rowcount_diff_pct
     from rowcount
 )
 
