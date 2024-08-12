@@ -202,5 +202,10 @@ models:
     description: ''
     data_type: numeric
     meta:
-      label: Total Node Runtime
-      datatype: numeric
+      metrics:
+        total_node_runtime:
+          label: Total Node Runtime
+          type: sum
+          format:
+            type: number
+            decimalPlaces: 0

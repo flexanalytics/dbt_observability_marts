@@ -82,6 +82,16 @@ models:
     data_type: text
     meta:
       label: Description
+  - name: total_rowcount
+    description: ''
+    meta:
+      metrics:
+        total_rowcount:
+          label: Total Rowcount
+          type: sum
+          format:
+            type: number
+            decimalPlaces: 0
   - name: is_tested
     description: ''
     data_type: text
