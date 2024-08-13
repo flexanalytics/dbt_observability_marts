@@ -40,6 +40,7 @@ select
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as snapshot_key,
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as metric_key,
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as exposure_key,
+    {{ dbt_utils.generate_surrogate_key(['node_id']) }} as node_key,
     {{ dbt_utils.generate_surrogate_key(['run_start_day']) }} as date_key,
     run_started_at,
     was_full_refresh,

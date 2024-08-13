@@ -137,6 +137,13 @@ models:
       hidden: true
     constraints:
       - type: not_null
+  - name: node_key
+    description: ''
+    data_type: text
+    meta:
+      hidden: true
+    constraints:
+      - type: not_null
   - name: date_key
     description: ''
     data_type: text
@@ -206,6 +213,28 @@ models:
         total_node_runtime:
           label: Total Node Runtime
           type: sum
+          format:
+            type: number
+            decimalPlaces: 0
+  - name: node_count
+    description: "Distinct count of Node ID"
+    meta:
+      metrics:
+        node_count:
+          sql: "${node_key}"
+          label: Node Count
+          type: count_distinct
+          format:
+            type: number
+            decimalPlaces: 0
+  - name: invocation_count
+    description: "Distinct count of invocations"
+    meta:
+      metrics:
+        invocation_count:
+          sql: "${invocation_key}"
+          label: Invocation Count
+          type: count_distinct
           format:
             type: number
             decimalPlaces: 0
