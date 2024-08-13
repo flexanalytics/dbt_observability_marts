@@ -10,6 +10,7 @@ with
         select
             command_invocation_id,
             run_started_at,
+            node_id,
             name,
             lag(run_started_at) over (partition by node_id order by run_started_at) as previous_run_started_at,
             lead(run_started_at) over (partition by node_id order by run_started_at) as next_run_started_at
@@ -33,6 +34,7 @@ with
             excs.next_run_started_at
         from {{ ref('stg_column') }} as cols
         inner join _executions as excs on cols.command_invocation_id = excs.command_invocation_id
+        and cols.node_id = excs.node_id
     ),
 
     pre as (
@@ -46,6 +48,7 @@ with
             excs.next_run_started_at
         from {{ ref('stg_column') }} as cols
         inner join _executions as excs on cols.command_invocation_id = excs.command_invocation_id
+        and cols.node_id = excs.node_id
     ),
 
     cur_models as (
@@ -58,6 +61,7 @@ with
             excs.next_run_started_at
         from {{ ref('stg_model') }} as mdls
         inner join _executions as excs on mdls.command_invocation_id = excs.command_invocation_id
+        and mdls.node_id = excs.node_id
     ),
 
     pre_models as (
@@ -70,6 +74,7 @@ with
             excs.next_run_started_at
         from {{ ref('stg_model') }} as mdls
         inner join _executions as excs on mdls.command_invocation_id = excs.command_invocation_id
+        and mdls.node_id = excs.node_id
     ),
 
     cur_seeds as (
@@ -82,6 +87,7 @@ with
             excs.next_run_started_at
         from {{ ref('stg_seed') }} as seeds
         inner join _executions as excs on seeds.command_invocation_id = excs.command_invocation_id
+        and seeds.node_id = excs.node_id
     ),
 
     pre_seeds as (
@@ -94,6 +100,7 @@ with
             excs.next_run_started_at
         from {{ ref('stg_seed') }} as seeds
         inner join _executions as excs on seeds.command_invocation_id = excs.command_invocation_id
+        and seeds.node_id = excs.node_id
     ),
 
     cur_sources as (
@@ -106,6 +113,7 @@ with
             excs.next_run_started_at
         from {{ ref('stg_source') }} as sources
         inner join _executions as excs on sources.command_invocation_id = excs.command_invocation_id
+        and sources.node_id = excs.node_id
     ),
 
     pre_sources as (
@@ -118,6 +126,7 @@ with
             excs.next_run_started_at
         from {{ ref('stg_source') }} as sources
         inner join _executions as excs on sources.command_invocation_id = excs.command_invocation_id
+        and sources.node_id = excs.node_id
     ),
 
     cur_snapshots as (
@@ -130,6 +139,7 @@ with
             excs.next_run_started_at
         from {{ ref('stg_snapshot') }} as snaps
         inner join _executions as excs on snaps.command_invocation_id = excs.command_invocation_id
+        and snaps.node_id = excs.node_id
     ),
 
     pre_snapshots as (
@@ -142,6 +152,7 @@ with
             excs.next_run_started_at
         from {{ ref('stg_snapshot') }} as snaps
         inner join _executions as excs on snaps.command_invocation_id = excs.command_invocation_id
+        and snaps.node_id = excs.node_id
     ),
 
 
