@@ -48,16 +48,26 @@ models:
     data_type: text
     meta:
       label: Column Name
-  - name: data_type
+  - name: generic_data_type
     description: ''
     data_type: text
     meta:
-      label: Data Type
-  - name: pre_data_type
+      label: Generic Data Type
+  - name: generic_pre_data_type
     description: ''
     data_type: text
     meta:
-      label: Pre Data Type
+      label: Previous Generic Data Type
+  - name: precise_data_type
+    description: ''
+    data_type: text
+    meta:
+      label: Precise Data Type
+  - name: precise_pre_data_type
+    description: ''
+    data_type: text
+    meta:
+      label: Previous Precise Data Type
   - name: detected_at
     description: ''
     data_type: timestamp
