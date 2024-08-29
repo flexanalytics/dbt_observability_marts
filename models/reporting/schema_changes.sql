@@ -23,7 +23,7 @@ executions as (
         lead(run_started_at)
             over (partition by node_id order by run_started_at)
             as next_run_started_at
-    from {{ ref('stg_execution') }}
+    from {{ ref('int_execution') }}
     {% if is_incremental() %}
 
         where
