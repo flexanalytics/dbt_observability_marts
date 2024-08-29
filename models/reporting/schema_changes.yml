@@ -61,13 +61,6 @@ models:
   - name: detected_at
     description: ''
     data_type: timestamp
-    meta:
-      label: Detected At
-      hidden: false
-      datatype: date
-      format:
-        type: date
-        pattern: YYYY-MM-DD HH:mm:ss
   - name: schema_changes
     meta:
       metrics:
