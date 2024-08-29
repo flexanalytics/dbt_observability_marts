@@ -12,11 +12,16 @@ executions as (
         run_started_at,
         node_id,
         resource_type,
-        name,
-        min(run_started_at) over (partition by node_id) as first_run_started_at,
+        project,
+        resource_name,
+        min(run_started_at) over () as project_first_run_started_at,
+        max(run_started_at)
+            over ()
+            as project_most_recent_run_started_at,
+        min(run_started_at) over (partition by node_id) as node_first_run_started_at,
         max(run_started_at)
             over (partition by node_id)
-            as most_recent_run_started_at,
+            as node_most_recent_run_started_at,
         lag(run_started_at)
             over (partition by node_id order by run_started_at)
             as previous_run_started_at,
@@ -40,10 +45,12 @@ _raw_columns as (
         cols.command_invocation_id,
         cols.column_name,
         cols.data_type as raw_data_type,
-        excs.name,
+        excs.resource_type,
+        excs.project,
+        excs.resource_name,
         excs.run_started_at,
-        excs.first_run_started_at,
-        excs.most_recent_run_started_at,
+        excs.node_first_run_started_at,
+        excs.node_most_recent_run_started_at,
         lag(cols.data_type)
             over (
                 partition by cols.node_id, cols.column_name
@@ -63,10 +70,12 @@ columns as (
         column_name,
         {{ convert_to_generic_type('raw_data_type') }} as data_type,
         {{ convert_to_generic_type('raw_pre_data_type') }} as pre_data_type,
-        name,
+        resource_type,
+        project,
+        resource_name,
         run_started_at,
-        first_run_started_at,
-        most_recent_run_started_at,
+        node_first_run_started_at,
+        node_most_recent_run_started_at,
         lag(run_started_at)
             over (partition by node_id, column_name order by run_started_at)
             as previous_run_started_at,
@@ -81,7 +90,9 @@ added as (
     select
         node_id,
         command_invocation_id,
-        name,
+        resource_type,
+        project,
+        resource_name,
         run_started_at,
         null as column_name,
         null as data_type,
@@ -92,14 +103,16 @@ added as (
         executions
     where
         previous_run_started_at is null
-        and run_started_at > first_run_started_at
+        and run_started_at > project_first_run_started_at
 ),
 
 removed as (
     select
         node_id,
         command_invocation_id,
-        name,
+        resource_type,
+        project,
+        resource_name,
         run_started_at,
         null as column_name,
         null as data_type,
@@ -110,7 +123,7 @@ removed as (
         executions
     where
         next_run_started_at is null
-        and run_started_at < most_recent_run_started_at
+        and run_started_at < project_most_recent_run_started_at
 ),
 
 -- columns
@@ -118,7 +131,9 @@ columns_added as (
     select
         node_id,
         command_invocation_id,
-        name,
+        resource_type,
+        project,
+        resource_name,
         'column_added' as change,
         run_started_at,
         column_name,
@@ -128,14 +143,16 @@ columns_added as (
     from columns
     where
         previous_run_started_at is null
-        and run_started_at > first_run_started_at
+        and run_started_at > node_first_run_started_at
 ),
 
 columns_removed as (
     select
         node_id,
         command_invocation_id,
-        name,
+        resource_type,
+        project,
+        resource_name,
         'column_removed' as change,
         run_started_at,
         column_name,
@@ -145,7 +162,7 @@ columns_removed as (
     from columns
     where
         next_run_started_at is null
-        and run_started_at < most_recent_run_started_at
+        and run_started_at < node_most_recent_run_started_at
 ),
 
 -- type changes
@@ -153,7 +170,9 @@ type_changes as (
     select
         node_id,
         command_invocation_id,
-        name,
+        resource_type,
+        project,
+        resource_name,
         'type_changed' as change,
         run_started_at,
         column_name,
@@ -168,18 +187,9 @@ all_changes as (
     select
         node_id,
         command_invocation_id,
-        {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=1) }}
-            as resource_type,
-        {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=2) }}
-            as project,
-        case
-            when
-                resource_type = 'source'
-                then
-                    {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=4) }}
-            else
-                {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=3) }}
-        end as resource_name,
+        resource_type,
+        project,
+        resource_name,
         change,
         column_name,
         data_type,
@@ -190,18 +200,9 @@ all_changes as (
     select
         node_id,
         command_invocation_id,
-        {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=1) }}
-            as resource_type,
-        {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=2) }}
-            as project,
-        case
-            when
-                resource_type = 'source'
-                then
-                    {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=4) }}
-            else
-                {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=3) }}
-        end as resource_name,
+        resource_type,
+        project,
+        resource_name,
         change,
         column_name,
         data_type,
@@ -212,18 +213,9 @@ all_changes as (
     select
         node_id,
         command_invocation_id,
-        {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=1) }}
-            as resource_type,
-        {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=2) }}
-            as project,
-        case
-            when
-                resource_type = 'source'
-                then
-                    {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=4) }}
-            else
-                {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=3) }}
-        end as resource_name,
+        resource_type,
+        project,
+        resource_name,
         change,
         column_name,
         data_type,
@@ -234,18 +226,9 @@ all_changes as (
     select
         node_id,
         command_invocation_id,
-        {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=1) }}
-            as resource_type,
-        {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=2) }}
-            as project,
-        case
-            when
-                resource_type = 'source'
-                then
-                    {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=4) }}
-            else
-                {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=3) }}
-        end as resource_name,
+        resource_type,
+        project,
+        resource_name,
         change,
         column_name,
         data_type,
@@ -256,32 +239,19 @@ all_changes as (
     select
         node_id,
         command_invocation_id,
-        {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=1) }}
-            as resource_type,
-        {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=2) }}
-            as project,
-        case
-            when
-                resource_type = 'source'
-                then
-                    {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=4) }}
-            else
-                {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=3) }}
-        end as resource_name,
+        resource_type,
+        project,
+        resource_name,
         change,
         column_name,
         data_type,
         pre_data_type,
         detected_at
     from type_changes
-
-
-
 )
 
 select
-    {{ dbt_utils.generate_surrogate_key(["command_invocation_id", "node_id"]) }}
-        as execution_key,
+    {{ dbt_utils.generate_surrogate_key(["command_invocation_id", "node_id"]) }} as execution_key,
     node_id,
     command_invocation_id,
     resource_type,
