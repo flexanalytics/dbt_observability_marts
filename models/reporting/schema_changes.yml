@@ -68,4 +68,42 @@ models:
       format:
         type: date
         pattern: YYYY-MM-DD HH:mm:ss
-
+  - name: schema_changes
+    meta:
+      metrics:
+        schema_changes:
+          sql: "${node_id}"
+          label: Schema Changes
+          type: count_distinct
+          format:
+            type: number
+            decimalPlaces: 0
+  - name: resource_count
+    meta:
+      metrics:
+        resource_count:
+          sql: "${resource_name}"
+          label: Resource Count
+          type: count_distinct
+          format:
+            type: number
+            decimalPlaces: 0
+  - name: total_resource_count
+    meta:
+      metrics:
+        total_resource_count:
+          sql: "${resource_name}"
+          label: Resource Count
+          type: count
+          format:
+            type: number
+            decimalPlaces: 0
+  - name: column_count
+    meta:
+      metrics:
+        column_count:
+        sql: "${column_name}"
+        type: count
+        format:
+          type: number
+          decimalPlaces: 0
