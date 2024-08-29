@@ -18,7 +18,9 @@ executions as (
         max(run_started_at)
             over ()
             as project_most_recent_run_started_at,
-        min(run_started_at) over (partition by node_id) as node_first_run_started_at,
+        min(run_started_at)
+            over (partition by node_id)
+            as node_first_run_started_at,
         max(run_started_at)
             over (partition by node_id)
             as node_most_recent_run_started_at,
@@ -251,7 +253,8 @@ all_changes as (
 )
 
 select
-    {{ dbt_utils.generate_surrogate_key(["command_invocation_id", "node_id"]) }} as execution_key,
+    {{ dbt_utils.generate_surrogate_key(["command_invocation_id", "node_id"]) }}
+        as execution_key,
     node_id,
     command_invocation_id,
     resource_type,
