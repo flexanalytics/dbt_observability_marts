@@ -74,6 +74,31 @@ models:
       label: Freshness
   - name: total_rowcount
     description: ''
-    data_type: text
     meta:
-      label: Total Rowcount
+      metrics:
+        total_rowcount:
+          label: Total Rowcount
+          type: sum
+          format:
+            type: number
+            decimalPlaces: 0
+  - name: previous_rowcount
+    description: ''
+    meta:
+      metrics:
+        previous_rowcount:
+          label: Previous Rowcount
+          type: sum
+          format:
+            type: number
+            decimalPlaces: 0
+  - name: average_rowcount
+    description: ''
+    meta:
+      metrics:
+        average_rowcount:
+          label: Average Rowcount
+          type: sum
+          format:
+            type: number
+            decimalPlaces: 0

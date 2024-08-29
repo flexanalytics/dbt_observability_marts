@@ -10,6 +10,7 @@ with
                 'command_invocation_id', 'node_id'
                 ]) }} as model_key,
             node_id,
+            run_started_at,
             resource_type,
             project,
             resource_name,
@@ -72,6 +73,8 @@ with
             models.meta,
             models.description,
             models.total_rowcount,
+            lag(models.total_rowcount) over(partition by models.node_id order by run_started_at) as previous_rowcount,
+            avg(models.total_rowcount) over(partition by models.node_id) as average_rowcount,
             case when untested_models.model_key is null then 'Yes' else 'No' end as is_tested
         from models
         left outer join untested_models on models.model_key = untested_models.model_key
