@@ -16,8 +16,8 @@ with rowcount as (
                 order by all_executions.run_started_at desc
             )
             as previous_rowcount
-    from edw_observability.all_executions as all_executions
-    inner join edw_observability.models as models
+    from {{ ref('all_executions') }} as all_executions
+    inner join {{ ref('models') }} as models
         on
             all_executions.command_invocation_id = models.command_invocation_id
             and all_executions.node_id = models.node_id

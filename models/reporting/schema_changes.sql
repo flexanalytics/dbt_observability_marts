@@ -115,7 +115,7 @@ added as (
         null as generic_pre_data_type,
         null as precise_data_type,
         null as precise_pre_data_type,
-        resource_type || '_added' as change,
+        {{ dbt.concat(['resource_type', "'_added'"]) }} as change,
         run_started_at as detected_at
     from
         executions
@@ -138,7 +138,7 @@ removed as (
         null as precise_data_type,
         null as precise_pre_data_type,
         run_started_at as detected_at,
-        resource_type || '_removed' as change
+        {{ dbt.concat(['resource_type', "'_removed'"]) }} as change
     from
         executions
     where
