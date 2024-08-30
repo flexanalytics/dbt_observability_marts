@@ -4,77 +4,88 @@
     )
 }}
 with
-    models as (
-        select
+models as (
+    select
             {{ dbt_utils.generate_surrogate_key([
                 'command_invocation_id', 'node_id'
                 ]) }} as model_key,
-            node_id,
-            resource_type,
-            project,
-            resource_name,
-            database_name,
-            schema_name,
-            name,
-            package_name,
-            path,
-            checksum,
-            materialization,
-            tags,
-            meta,
-            description,
-            total_rowcount
-        from {{ ref('int_model') }}
-    ),
+        node_id,
+        run_started_at,
+        resource_type,
+        project,
+        resource_name,
+        database_name,
+        schema_name,
+        name,
+        package_name,
+        path,
+        checksum,
+        materialization,
+        tags,
+        meta,
+        description,
+        total_rowcount
+    from {{ ref('int_model') }}
+),
 
-    _tests as (
-        select lower(
+_tests as (
+    select
+        lower(
             {% if target.type == 'snowflake' %}
                 array_to_string(depends_on_nodes, '')
             {% else %}
                 depends_on_nodes
             {% endif %})
             as depends_on_nodes
-        from {{ ref('stg_test') }}
-    ),
+    from {{ ref('stg_test') }}
+),
 
-    _models as (
-        select
-            '%' || lower(node_id) || '%' as node_key,
-            node_id,
-            model_key
-        from models
-    ),
+_models as (
+    select
+        node_id,
+        model_key,
+        '%' || lower(node_id) || '%' as node_key
+    from models
+),
 
-    untested_models as (
-        select distinct models.model_key
-        from _models as models
-        left outer join _tests as test
-            on test.depends_on_nodes like models.node_key
-        where test.depends_on_nodes is null
-    ),
+untested_models as (
+    select distinct models.model_key
+    from _models as models
+    left outer join _tests as test
+        on test.depends_on_nodes like models.node_key
+    where test.depends_on_nodes is null
+),
 
-    final as (
-        select
-            models.model_key,
-            models.node_id,
-            models.resource_type,
-            models.project,
-            models.resource_name,
-            models.database_name,
-            models.schema_name,
-            models.name,
-            models.package_name,
-            models.path,
-            models.checksum,
-            models.materialization,
-            models.tags,
-            models.meta,
-            models.description,
-            models.total_rowcount,
-            case when untested_models.model_key is null then 'Yes' else 'No' end as is_tested
-        from models
-        left outer join untested_models on models.model_key = untested_models.model_key
-    )
+final as (
+    select
+        models.model_key,
+        models.node_id,
+        models.resource_type,
+        models.project,
+        models.resource_name,
+        models.database_name,
+        models.schema_name,
+        models.name,
+        models.package_name,
+        models.path,
+        models.checksum,
+        models.materialization,
+        models.tags,
+        models.meta,
+        models.description,
+        models.total_rowcount,
+        lag(models.total_rowcount)
+            over (partition by models.node_id order by run_started_at)
+            as previous_rowcount,
+        avg(models.total_rowcount)
+            over (partition by models.node_id)
+            as average_rowcount,
+        case when untested_models.model_key is null then 'Yes' else 'No' end
+            as is_tested
+    from models
+    left outer join
+        untested_models
+        on models.model_key = untested_models.model_key
+)
 
 select * from final

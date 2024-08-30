@@ -48,24 +48,65 @@ models:
     data_type: text
     meta:
       label: Column Name
-  - name: data_type
+  - name: generic_data_type
     description: ''
     data_type: text
     meta:
-      label: Data Type
-  - name: pre_data_type
+      label: Generic Data Type
+  - name: generic_pre_data_type
     description: ''
     data_type: text
     meta:
-      label: Pre Data Type
+      label: Previous Generic Data Type
+  - name: precise_data_type
+    description: ''
+    data_type: text
+    meta:
+      label: Precise Data Type
+  - name: precise_pre_data_type
+    description: ''
+    data_type: text
+    meta:
+      label: Previous Precise Data Type
   - name: detected_at
     description: ''
     data_type: timestamp
+  - name: schema_changes
     meta:
-      label: Detected At
-      hidden: false
-      datatype: date
-      format:
-        type: date
-        pattern: YYYY-MM-DD HH:mm:ss
-
+      metrics:
+        schema_changes:
+          sql: "${node_id}"
+          label: Schema Changes
+          type: count_distinct
+          format:
+            type: number
+            decimalPlaces: 0
+  - name: resource_count
+    meta:
+      metrics:
+        resource_count:
+          sql: "${resource_name}"
+          label: Resource Count
+          type: count_distinct
+          format:
+            type: number
+            decimalPlaces: 0
+  - name: total_resource_count
+    meta:
+      metrics:
+        total_resource_count:
+          sql: "${resource_name}"
+          label: Resource Count
+          type: count
+          format:
+            type: number
+            decimalPlaces: 0
+  - name: column_count
+    meta:
+      metrics:
+        column_count:
+        sql: "${column_name}"
+        type: count
+        format:
+          type: number
+          decimalPlaces: 0

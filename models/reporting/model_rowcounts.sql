@@ -5,10 +5,16 @@ with rowcount as (
         all_executions.run_started_at,
         models.total_rowcount,
         lag(models.total_rowcount, 0)
-            over (order by all_executions.run_started_at desc)
+            over (
+                partition by models.node_id
+                order by all_executions.run_started_at desc
+            )
             as current_rowcount,
         lead(models.total_rowcount, 1)
-            over (order by all_executions.run_started_at desc)
+            over (
+                partition by models.node_id
+                order by all_executions.run_started_at desc
+            )
             as previous_rowcount
     from edw_observability.all_executions as all_executions
     inner join edw_observability.models as models
@@ -35,7 +41,8 @@ rowdiff as (
             cast(current_rowcount as numeric(19, 6))
             - cast(previous_rowcount as numeric(19, 6))
         )
-        / nullif(cast(previous_rowcount as numeric(19, 6)), 0) as rowcount_diff_pct
+        / nullif(cast(previous_rowcount as numeric(19, 6)), 0)
+            as rowcount_diff_pct
     from rowcount
 )
 
