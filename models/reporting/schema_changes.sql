@@ -116,7 +116,7 @@ added as (
         null as precise_data_type,
         null as precise_pre_data_type,
         resource_type || '_added' as change,
-        coalesce(next_run_started_at, run_started_at) as detected_at
+        run_started_at as detected_at
     from
         executions
     where
