@@ -109,4 +109,4 @@ models:
           type: count
           format:
             type: number
-          decimalPlaces: 0
+            decimalPlaces: 0
