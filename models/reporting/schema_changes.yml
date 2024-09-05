@@ -1,112 +1,121 @@
 version: 2
 models:
-- name: schema_changes
-  description: ''
-  meta:
-    label: Schema Changes
-    display_index: 1
-    joins:
-      - to: dim_execution
-        type: inner
-        join_on:
-          - from_field: execution_key
-            exp: '='
-            to_field: execution_key
-  columns:
-  - name: execution_key
-    description: ''
-    data_type: text
-    meta:
-      hidden: true
-  - name: node_id
-    description: ''
-    data_type: text
-    meta:
-      label: Node ID
-  - name: resource_type
-    description: ''
-    data_type: text
-    meta:
-      label: Resource Type
-  - name: project
-    description: ''
-    data_type: text
-    meta:
-      label: Project
-  - name: resource_name
-    description: ''
-    data_type: text
-    meta:
-      label: Resource Name
-  - name: change
-    description: ''
-    data_type: text
-    meta:
-      label: Change
-  - name: column_name
-    description: ''
-    data_type: text
-    meta:
-      label: Column Name
-  - name: generic_data_type
-    description: ''
-    data_type: text
-    meta:
-      label: Generic Data Type
-  - name: generic_pre_data_type
-    description: ''
-    data_type: text
-    meta:
-      label: Previous Generic Data Type
-  - name: precise_data_type
-    description: ''
-    data_type: text
-    meta:
-      label: Precise Data Type
-  - name: precise_pre_data_type
-    description: ''
-    data_type: text
-    meta:
-      label: Previous Precise Data Type
-  - name: detected_at
-    description: ''
-    data_type: timestamp
   - name: schema_changes
+    description: 'Tracks changes made to database schemas over time, including alterations to table structures, column structures, data types, and resource additions or removals'
     meta:
-      metrics:
-        schema_changes:
-          sql: "${node_id}"
-          label: Schema Changes
-          type: count_distinct
-          format:
-            type: number
-            decimalPlaces: 0
-  - name: resource_count
-    meta:
-      metrics:
-        resource_count:
-          sql: "${resource_name}"
-          label: Resource Count
-          type: count_distinct
-          format:
-            type: number
-            decimalPlaces: 0
-  - name: total_resource_count
-    meta:
-      metrics:
-        total_resource_count:
-          sql: "${resource_name}"
-          label: Resource Count
-          type: count
-          format:
-            type: number
-            decimalPlaces: 0
-  - name: column_count
-    meta:
-      metrics:
-        column_count:
-          sql: "${column_name}"
-          type: count
-          format:
-            type: number
-            decimalPlaces: 0
+      label: Schema Changes
+      display_index: 1
+      joins:
+        - to: dim_execution
+          type: inner
+          join_on:
+            - from_field: execution_key
+              exp: '='
+              to_field: execution_key
+    columns:
+      - name: execution_key
+        description: 'Unique identifier for each execution instance, used to track and join execution metadata.'
+        data_type: text
+        meta:
+          hidden: true
+      - name: node_id
+        description: 'Unique identifier for a node within the dbt DAG, representing a model or other asset. Takes the form of <resource_type>.<project_name>.<resource_name> (e.g. `model.edw.dim_date`)'
+        data_type: text
+        meta:
+          label: Node ID
+      - name: resource_type
+        description: 'The type of resource being modified. Includes model, test, seed, snapshot, source, column'
+        data_type: text
+        meta:
+          label: Resource Type
+      - name: project
+        description: 'The dbt project where the schema change occurred.'
+        data_type: text
+        meta:
+          label: Project
+      - name: resource_name
+        description: 'The name of the resource impacted by the schema change.'
+        data_type: text
+        meta:
+          label: Resource Name
+      - name: change_type
+        description: 'Details the type of schema change that was applied. Includes <resource_type>_added, <resource_type>_removed, type_changed, precision_changed'
+        data_type: text
+        meta:
+          label: Change Type
+      - name: change_type_desc
+        description: 'Formatted change_type for reporting'
+        data_type: text
+        meta:
+          label: Change Type Description
+      - name: column_name
+        description: 'The name of the column affected by the schema change. Will be null for non-column changes (e.g. model added).'
+        data_type: text
+        meta:
+          label: Column Name
+      - name: generic_data_type
+        description: 'The general data type of the column after the schema change. Includes Text, Numeric, Boolean, Date/Time, Binary, Spatial, UUID, Json'
+        data_type: text
+        meta:
+          label: Generic Data Type
+      - name: generic_pre_data_type
+        description: 'The general data type of the column before the schema change.'
+        data_type: text
+        meta:
+          label: Previous Generic Data Type
+      - name: precise_data_type
+        description: 'The exact data type of the column after the schema change (e.g. varchar(255), int4).'
+        data_type: text
+        meta:
+          label: Precise Data Type
+      - name: precise_pre_data_type
+        description: 'The exact data type of the column before the schema change.'
+        data_type: text
+        meta:
+          label: Previous Precise Data Type
+      - name: detected_at
+        description: 'Timestamp of when the schema change was detected. Based on dbt execution time, not necessarily the exact time the change took place in the repository or project'
+        data_type: timestamp
+      - name: schema_changes
+        meta:
+          metrics:
+            schema_changes:
+              sql: "${node_id}"
+              label: Schema Change Count
+              type: count_distinct
+              format:
+                type: number
+                decimalPlaces: 0
+              description: 'Counts distinct schema changes detected by node ID.'
+      - name: resource_count
+        meta:
+          metrics:
+            resource_count:
+              sql: "${resource_name}"
+              label: Resource Count
+              type: count_distinct
+              format:
+                type: number
+                decimalPlaces: 0
+              description: 'Counts distinct resources (tables/models) affected by schema changes.'
+      - name: rowcount
+        meta:
+          metrics:
+            rowcount:
+              sql: "${node_id}"
+              label: Row Count
+              type: count
+              format:
+                type: number
+                decimalPlaces: 0
+              description: 'Counts total rows impacted by schema changes, based on node ID.'
+      - name: column_count
+        meta:
+          metrics:
+            column_count:
+              sql: "${column_name}"
+              type: count
+              format:
+                type: number
+                decimalPlaces: 0
+              description: 'Counts total columns impacted by schema changes.'
