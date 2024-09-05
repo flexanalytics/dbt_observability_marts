@@ -38,11 +38,16 @@ models:
         data_type: text
         meta:
           label: Resource Name
-      - name: change
+      - name: change_type
         description: 'Details the type of schema change that was applied. Includes <resource_type>_added, <resource_type>_removed, type_changed, precision_changed'
         data_type: text
         meta:
-          label: Change
+          label: Change Type
+      - name: change_type_desc
+        description: 'Formatted change_type for reporting'
+        data_type: text
+        meta:
+          label: Change Type Description
       - name: column_name
         description: 'The name of the column affected by the schema change. Will be null for non-column changes (e.g. model added).'
         data_type: text
