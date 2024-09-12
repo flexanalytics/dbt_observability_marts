@@ -116,7 +116,7 @@ added as (
         null as precise_data_type,
         null as precise_pre_data_type,
         {{ dbt.concat(['resource_type', "'_added'"]) }} as change_type,
-        {{ dbt.concat(["upper(substring(resource_type, 1, 1))", "lower(substring(resource_type, 2, len(resource_type)))", "' Added'"]) }} as change_type_desc
+        {{ dbt.concat(["upper(substring(resource_type, 1, 1))", "lower(substring(resource_type, 2, len(resource_type)))", "' Added'"]) }} as change_type_desc,
         run_started_at as detected_at
     from
         executions
