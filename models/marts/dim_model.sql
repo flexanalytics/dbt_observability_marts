@@ -23,8 +23,7 @@ models as (
         materialization,
         tags,
         meta,
-        description,
-        total_rowcount
+        description
     from {{ ref('int_model') }}
 ),
 
@@ -73,13 +72,6 @@ final as (
         models.tags,
         models.meta,
         models.description,
-        models.total_rowcount,
-        lag(models.total_rowcount)
-            over (partition by models.node_id order by run_started_at)
-            as previous_rowcount,
-        avg(models.total_rowcount)
-            over (partition by models.node_id)
-            as average_rowcount,
         case when untested_models.model_key is null then 'Yes' else 'No' end
             as is_tested
     from models
