@@ -12,16 +12,16 @@ Ensure you have dbt installed and your project set up. This project is an additi
 
 ### Installation
 
-1. **Add `dbt_observability_marts` to your `packages.yml` file:**
+This project uses stable release tags for both [minor and patch releases](https://semver.org/)
 
-   This step involves editing your `packages.yml` file to include the `dbt_observability_marts` package. If you don't have a `packages.yml` file, you'll need to create one in your dbt project root.
+- v1-stable will keep your project up to date with all 1.x.x minor releases and v1.0-stable will keep your project up to date with all 1.0.x patch releases
 
-   ```yaml
-   packages:
-     - git: "https://github.com/flexanalytics/dbt_observability_marts.git"
-       version: "0.0.1"
-    ```
-
+1. Add this package to your `packages.yml`:
+```yaml
+packages:
+ - git: "https://github.com/flexanalytics/dbt_observability_marts.git"
+    revision: v1-stable  # or specific version with 1.0.1
+```
 2. **Configure your dbt_project.yml:**
 
 You need to add specific configurations to your `dbt_project.yml` file to specify the databases and schemas you want to include in your observability marts.
@@ -31,7 +31,7 @@ You need to add specific configurations to your `dbt_project.yml` file to specif
   "dbt_observability:objects":  # database: [schemas]
     "dev": ["observability_schema_one", "observability_schema_two"]
     "prod": ["observability_schema_three", "observability_schema_four"]
-   ```
+```
 
 ### Usage
 After installation and configuration, run your dbt project as usual. The observability marts will be generated based on the sources specified in your dbt_project.yml file.
