@@ -76,6 +76,8 @@ models:
       - name: detected_at
         description: 'Timestamp of when the schema change was detected. Based on dbt execution time, not necessarily the exact time the change took place in the repository or project'
         data_type: timestamp
+        meta:
+          label: Detected At
       - name: schema_changes
         meta:
           metrics:
