@@ -28,8 +28,8 @@ with
             e.materialization,
             e.schema_name,
             case
-                when e.resource_type = 'model' then coalesce({{ dbt.cast("m.total_rowcount", api.Column.translate_type('bigint')) }}, 0)
-                when e.resource_type = 'source' then coalesce({{ dbt.cast("s.total_rowcount", api.Column.translate_type('bigint')) }}, 0)
+                when e.resource_type = 'model' then coalesce(cast(m.total_rowcount as {{ api.Column.translate_type('bigint') }}), 0)
+                when e.resource_type = 'source' then coalesce(cast(s.total_rowcount as {{ api.Column.translate_type('bigint') }}), 0)
                 else 0
             end
             as total_rowcount
