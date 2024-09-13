@@ -19,8 +19,7 @@ source as (
         name,
         identifier,
         loaded_at_field,
-        freshness,
-        total_rowcount
+        freshness
     from {{ ref('int_source') }}
 )
 
@@ -40,10 +39,5 @@ select
     name,
     identifier,
     loaded_at_field,
-    freshness,
-    total_rowcount,
-    lag(total_rowcount)
-        over (partition by node_id order by run_started_at)
-        as previous_rowcount,
-    avg(total_rowcount) over (partition by node_id) as average_rowcount
+    freshness
 from source

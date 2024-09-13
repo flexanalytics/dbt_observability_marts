@@ -6,28 +6,42 @@
 with
     executions as (
         select
-            command_invocation_id,
-            node_id,
-            resource_type,
-            project,
-            resource_name,
-            run_started_at,
+            e.command_invocation_id,
+            e.node_id,
+            e.resource_type,
+            e.project,
+            e.resource_name,
+            e.run_started_at,
             cast(
                 {{
                     dbt.date_trunc(
-                        'day', 'run_started_at'
+                        'day', 'e.run_started_at'
                         )
                     }} as date
             ) as run_start_day,
-            was_full_refresh,
-            thread_id,
-            status,
-            compile_started_at,
-            query_completed_at,
-            total_node_runtime,
-            materialization,
-            schema_name
-        from {{ ref('int_execution') }}
+            e.was_full_refresh,
+            e.thread_id,
+            e.status,
+            e.compile_started_at,
+            e.query_completed_at,
+            e.total_node_runtime,
+            e.materialization,
+            e.schema_name,
+            coalesce(
+                case
+                    when e.resource_type = 'model' then m.total_rowcount
+                    when e.resource_type = 'source' then s.total_rowcount
+                    else 0
+                end, 0)
+            as total_rowcount
+        from
+            {{ ref('int_execution') }} e
+        left outer join {{ ref('stg_model') }} m on
+            e.command_invocation_id = m.command_invocation_id
+            and e.node_id = m.node_id
+        left outer join {{ ref('stg_source') }} s on
+            e.command_invocation_id = s.command_invocation_id
+            and e.node_id = s.node_id
     )
 select
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as execution_key,
@@ -47,5 +61,8 @@ select
     thread_id,
     compile_started_at,
     query_completed_at,
-    total_node_runtime
+    total_node_runtime,
+    total_rowcount,
+    lag(total_rowcount) over (partition by node_id order by run_started_at) as previous_rowcount,
+    avg(total_rowcount) over (partition by node_id order by run_started_at) as average_rowcount
 from executions
