@@ -27,12 +27,11 @@ with
             e.total_node_runtime,
             e.materialization,
             e.schema_name,
-            coalesce(
-                case
-                    when e.resource_type = 'model' then m.total_rowcount
-                    when e.resource_type = 'source' then s.total_rowcount
-                    else 0
-                end, 0)
+            case
+                when e.resource_type = 'model' then coalesce({{ dbt.cast("m.total_rowcount", api.Column.translate_type('bigint')) }}, 0)
+                when e.resource_type = 'source' then coalesce({{ dbt.cast("s.total_rowcount", api.Column.translate_type('bigint')) }}, 0)
+                else 0
+            end
             as total_rowcount
         from
             {{ ref('int_execution') }} e
