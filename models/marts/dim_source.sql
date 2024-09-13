@@ -30,6 +30,9 @@ select
         'node_id'
     ]) }} as source_key,
     node_id,
+    resource_type,
+    project,
+    resource_name,
     database_name,
     schema_name,
     source_name,
