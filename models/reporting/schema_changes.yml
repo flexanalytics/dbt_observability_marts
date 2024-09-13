@@ -116,6 +116,7 @@ models:
           metrics:
             column_count:
               sql: "${column_name}"
+              label: Column Count
               type: count
               format:
                 type: number
