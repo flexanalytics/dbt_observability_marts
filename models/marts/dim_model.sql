@@ -43,7 +43,7 @@ _models as (
     select
         node_id,
         model_key,
-        '%' || lower(node_id) || '%' as node_key
+        {{ dbt.concat(["'%'", 'lower(node_id)', "'%'"]) }} as node_key
     from models
 ),
 

@@ -1,4 +1,4 @@
-with rowcount as (
+with model_rowcounts as (
     select
         all_executions.command_invocation_id,
         all_executions.node_id,
@@ -43,7 +43,7 @@ rowdiff as (
         )
         / nullif(cast(previous_rowcount as numeric(19, 6)), 0)
             as rowcount_diff_pct
-    from rowcount
+    from model_rowcounts
 )
 
 select *
