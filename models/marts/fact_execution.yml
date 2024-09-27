@@ -269,3 +269,27 @@ models:
               format:
                 type: number
                 decimalPlaces: 0
+      - name: change_from_previous_rowcount
+        description: 'Percent change from previous rowcount'
+        meta:
+          metrics:
+            change_from_previous_rowcount:
+              sql: "( ${total_rowcount} - ${previous_rowcount} ) / ${previous_rowcount}"
+              label: "% Change (Previous Rowcount)"
+              type: average
+              format:
+                type: percent
+                decimalPlaces: 1
+                suffix: "%"
+      - name: change_from_average_rowcount
+        description: 'Percent change from average rowcount'
+        meta:
+          metrics:
+            change_from_average_rowcount:
+              sql: "( ${total_rowcount} - ${average_rowcount} ) / ${average_rowcount}"
+              label: "% Change (Average Rowcount)"
+              type: average
+              format:
+                type: percent
+                decimalPlaces: 1
+                suffix: "%"
