@@ -215,7 +215,8 @@ models:
               type: sum
               format:
                 type: number
-                decimalPlaces: 0
+                decimalPlaces: 1
+                suffix: s
       - name: node_count
         description: "Distinct count of Node ID"
         meta:
