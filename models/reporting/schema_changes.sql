@@ -1,7 +1,6 @@
 {{
     config(
-        enabled=var('dbt_observability:marts_enabled', true),
-        materialized='incremental'
+        enabled=var('dbt_observability:marts_enabled', true)
     )
 }}
 with
@@ -31,13 +30,6 @@ executions as (
             over (partition by node_id order by run_started_at)
             as next_run_started_at
     from {{ ref('int_execution') }}
-    {% if is_incremental() %}
-
-        where
-            run_started_at
-            >= (select coalesce(max(detected_at), '1900-01-01') from {{ this }})
-
-    {% endif %}
 ),
 
 _raw_columns as (
@@ -330,3 +322,4 @@ select
     precise_pre_data_type,
     detected_at
 from all_changes
+
