@@ -70,31 +70,31 @@ models:
     data_type: numeric
     meta:
       label: Row Min
-      datatype: numeric
+      datatype: number
   - name: row_max
     description: ''
     data_type: numeric
     meta:
       label: Row Max
-      datatype: numeric
+      datatype: number
   - name: row_avg
     description: ''
     data_type: numeric
     meta:
       label: Row Avg
-      datatype: numeric
+      datatype: number
   - name: row_sum
     description: ''
     data_type: numeric
     meta:
       label: Row Sum
-      datatype: numeric
+      datatype: number
   - name: row_stdev
     description: ''
     data_type: numeric
     meta:
       label: Row Stdev
-      datatype: numeric
+      datatype: number
   - name: is_metric
     description: ''
     data_type: boolean
