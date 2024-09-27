@@ -215,7 +215,56 @@ models:
               type: sum
               format:
                 type: number
-                decimalPlaces: 0
+                decimalPlaces: 1
+                suffix: s
+      - name: previous_runtime
+        description: ''
+        data_type: numeric
+        meta:
+          metrics:
+            previous_runtime:
+              label: Previous Runtime
+              type: sum
+              format:
+                type: number
+                decimalPlaces: 1
+                suffix: s
+      - name: average_runtime
+        description: ''
+        data_type: numeric
+        meta:
+          metrics:
+            average_runtime:
+              label: Average Runtime
+              type: sum
+              format:
+                type: number
+                decimalPlaces: 1
+                suffix: s
+      - name: change_from_previous_runtime
+        description: 'Percent change from previous runtime'
+        meta:
+          metrics:
+            change_from_previous_runtime:
+              sql: "( ${total_node_runtime} - ${previous_runtime} ) / ${previous_runtime}"
+              label: "% Change (Previous Runtime)"
+              type: average
+              format:
+                type: percent
+                decimalPlaces: 1
+                suffix: "%"
+      - name: change_from_average_runtime
+        description: 'Percent change from average runtime'
+        meta:
+          metrics:
+            change_from_average_runtime:
+              sql: "( ${total_node_runtime} - ${average_runtime} ) / ${average_runtime}"
+              label: "% Change (Average Runtime)"
+              type: average
+              format:
+                type: percent
+                decimalPlaces: 1
+                suffix: "%"
       - name: node_count
         description: "Distinct count of Node ID"
         meta:
@@ -268,3 +317,27 @@ models:
               format:
                 type: number
                 decimalPlaces: 0
+      - name: change_from_previous_rowcount
+        description: 'Percent change from previous rowcount'
+        meta:
+          metrics:
+            change_from_previous_rowcount:
+              sql: "( ${total_rowcount} - ${previous_rowcount} ) / ${previous_rowcount}"
+              label: "% Change (Previous Rowcount)"
+              type: average
+              format:
+                type: percent
+                decimalPlaces: 1
+                suffix: "%"
+      - name: change_from_average_rowcount
+        description: 'Percent change from average rowcount'
+        meta:
+          metrics:
+            change_from_average_rowcount:
+              sql: "( ${total_rowcount} - ${average_rowcount} ) / ${average_rowcount}"
+              label: "% Change (Average Rowcount)"
+              type: average
+              format:
+                type: percent
+                decimalPlaces: 1
+                suffix: "%"
