@@ -117,6 +117,30 @@ added as (
         and run_started_at > project_first_run_started_at
 ),
 
+first_observed as (
+    select
+        node_id,
+        command_invocation_id,
+        resource_type,
+        project,
+        resource_name,
+        run_started_at,
+        null as column_name,
+        null as generic_data_type,
+        null as generic_pre_data_type,
+        null as precise_data_type,
+        null as precise_pre_data_type,
+        {{ dbt.concat(['resource_type', "'_first_observed'"]) }} as change_type,
+        {{ dbt.concat(["upper(substring(resource_type, 1, 1))", "lower(substring(resource_type, 2, len(resource_type)))", "' First Observed'"]) }} as change_type_desc,
+        run_started_at as detected_at
+    from
+        executions
+    where
+        previous_run_started_at is null
+        and run_started_at = project_first_run_started_at
+),
+
+
 removed as (
     select
         node_id,
@@ -163,6 +187,29 @@ columns_added as (
         column_previous_run_started_at is null
         and run_started_at > node_first_run_started_at
 ),
+
+columns_first_observed as (
+    select
+        node_id,
+        command_invocation_id,
+        resource_type,
+        project,
+        resource_name,
+        'column_first_observed' as change_type,
+        'Column First Observed' as change_type_desc,
+        run_started_at,
+        column_name,
+        generic_data_type,
+        generic_pre_data_type,
+        precise_data_type,
+        precise_pre_data_type,
+        run_started_at as detected_at
+    from columns
+    where
+        column_previous_run_started_at is null
+        and run_started_at = node_first_run_started_at
+),
+
 
 columns_removed as (
     select
@@ -254,6 +301,22 @@ all_changes as (
         precise_data_type,
         precise_pre_data_type,
         detected_at
+    from first_observed
+    union
+    select
+        node_id,
+        command_invocation_id,
+        resource_type,
+        project,
+        resource_name,
+        change_type,
+        change_type_desc,
+        column_name,
+        generic_data_type,
+        generic_pre_data_type,
+        precise_data_type,
+        precise_pre_data_type,
+        detected_at
     from removed
     union
     select
@@ -271,6 +334,22 @@ all_changes as (
         precise_pre_data_type,
         detected_at
     from columns_added
+    union
+    select
+        node_id,
+        command_invocation_id,
+        resource_type,
+        project,
+        resource_name,
+        change_type,
+        change_type_desc,
+        column_name,
+        generic_data_type,
+        generic_pre_data_type,
+        precise_data_type,
+        precise_pre_data_type,
+        detected_at
+    from columns_first_observed
     union
     select
         node_id,
