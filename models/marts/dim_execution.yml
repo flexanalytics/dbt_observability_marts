@@ -1,60 +1,124 @@
 version: 2
 models:
-- name: dim_execution
-  description: ''
-  meta:
-    label: Execution Dimension
-  columns:
-  - name: execution_key
+  - name: dim_execution
     description: ''
-    data_type: text
     meta:
-      hidden: true
-    constraints:
-      - type: not_null
-      - type: unique
-      - type: primary_key
-        warn_unenforced: false
-    tests:
-    - not_null
-    - unique
-  - name: node_id
-    description: ''
-    data_type: text
-    meta:
-      label: Node ID
-  - name: resource_type
-    description: ''
-    data_type: text
-    meta:
-      label: Resource Type
-  - name: project
-    description: ''
-    data_type: text
-    meta:
-      label: Project
-  - name: resource_name
-    description: ''
-    data_type: text
-    meta:
-      label: Resource Name
-  - name: status
-    description: ''
-    data_type: text
-    meta:
-      label: Status
-  - name: materialization
-    description: ''
-    data_type: text
-    meta:
-      label: Materialization
-  - name: schema_name
-    description: ''
-    data_type: text
-    meta:
-      label: Schema Name
-  - name: most_recent_run
-    description: ''
-    data_type: text
-    meta:
-      label: Most Recent Run
+      label: Execution Dimension
+    columns:
+      - name: execution_key
+        description: ''
+        data_type: text
+        meta:
+          hidden: true
+        constraints:
+          - type: not_null
+          - type: unique
+          - type: primary_key
+            warn_unenforced: false
+        tests:
+        - not_null
+        - unique
+      - name: node_id
+        description: ''
+        data_type: text
+        meta:
+          label: Node ID
+      - name: resource_type
+        description: ''
+        data_type: text
+        meta:
+          label: Resource Type
+      - name: project
+        description: ''
+        data_type: text
+        meta:
+          label: Project
+      - name: resource_name
+        description: ''
+        data_type: text
+        meta:
+          label: Resource Name
+      - name: status
+        description: ''
+        data_type: text
+        meta:
+          label: Status
+      - name: materialization
+        description: ''
+        data_type: text
+        meta:
+          label: Materialization
+      - name: schema_name
+        description: ''
+        data_type: text
+        meta:
+          label: Schema Name
+      - name: run_started_at
+        description: ''
+        data_type: timestamp
+        meta:
+          label: Run Started At
+          hidden: false
+          datatype: date
+          format:
+            type: date
+            pattern: YYYY-MM-DD HH:mm:ss
+      - name: was_full_refresh
+        description: ''
+        data_type: boolean
+        meta:
+          label: Was Full Refresh
+          datatype: boolean
+      - name: thread_id
+        description: ''
+        data_type: integer
+        meta:
+          label: Thread ID
+          datatype: integer
+      - name: compile_started_at
+        description: ''
+        meta:
+          label: Compile Started At
+          hidden: false
+          datatype: date
+          format:
+            type: date
+            pattern: YYYY-MM-DD HH:mm:ss
+        meta:
+          label: Compile Started At
+          hidden: false
+          datatype: date
+          format:
+            type: date
+            pattern: YYYY-MM-DD HH:mm:ss
+      - name: query_completed_at
+        description: ''
+        meta:
+          label: Query Completed At
+          hidden: false
+          datatype: date
+          format:
+            type: date
+            pattern: YYYY-MM-DD HH:mm:ss
+        meta:
+          label: Query Completed At
+          hidden: false
+          datatype: date
+          format:
+            type: date
+            pattern: YYYY-MM-DD HH:mm:ss
+      - name: most_recent_run
+        description: 'Use dim_invocation.most_recent_run instead'
+        data_type: text
+        meta:
+          label: Most Recent Run
+      - name: most_recent_node_run
+        description: '"Yes" if this is the most recent run for the node, otherwise "No"'
+        data_type: text
+        meta:
+          label: Most Recent Node Run
+      - name: most_recent_node_run_per_day
+        description: '"Yeas" if this is the most recent run for the node on that day, otherwise "No"'
+        data_type: text
+        meta:
+          label: Most Recent Node Run Per Day
