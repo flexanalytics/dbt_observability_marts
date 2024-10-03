@@ -28,6 +28,7 @@ with
 
 select
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as execution_key,
+    command_invocation_id,
     run_started_at,
     compile_started_at,
     query_completed_at,
