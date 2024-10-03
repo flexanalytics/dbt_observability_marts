@@ -58,13 +58,3 @@ models:
     data_type: text
     meta:
       label: Most Recent Run
-  - name: resource_count
-    meta:
-      metrics:
-        resource_count:
-          sql: "${resource_name}"
-          label: Resource Count
-          type: count_distinct
-          format:
-            type: number
-            decimalPlaces: 0
