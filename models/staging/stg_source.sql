@@ -30,3 +30,8 @@ select
     {% endif %}
     total_rowcount
 from {{ ref(target_name, 'sources') }}
+where exists (
+    select *
+    from {{ ref(target_name, 'all_executions') }}
+    where all_executions.command_invocation_id = sources.command_invocation_id
+)
