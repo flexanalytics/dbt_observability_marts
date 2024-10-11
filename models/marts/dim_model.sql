@@ -24,7 +24,7 @@ models as (
         tags,
         meta,
         description
-    from {{ ref('int_model') }}
+    from {{ ref('dbt_observability_marts', 'int_model') }}
 ),
 
 _tests as (
@@ -36,7 +36,7 @@ _tests as (
                 depends_on_nodes
             {% endif %})
             as depends_on_nodes
-    from {{ ref('stg_test') }}
+    from {{ ref('dbt_observability_marts', 'stg_test') }}
 ),
 
 _models as (

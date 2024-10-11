@@ -5,7 +5,7 @@
 }}
 with
     dt as (
-        select * from {{ ref('stg_date') }}
+        select * from {{ ref('dbt_observability_marts', 'stg_date') }}
     )
 
 select

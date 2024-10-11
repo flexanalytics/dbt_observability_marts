@@ -23,7 +23,7 @@ with
             dbt_cloud_run_reason,
             env_vars,
             dbt_vars
-        from {{ ref('stg_invocation') }}
+        from {{ ref('dbt_observability_marts', 'stg_invocation') }}
     )
 
 select

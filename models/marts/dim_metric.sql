@@ -20,7 +20,7 @@ with
             meta,
             depends_on_nodes,
             description
-        from {{ ref('stg_metric') }}
+        from {{ ref('dbt_observability_marts', 'stg_metric') }}
     )
 
 select

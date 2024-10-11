@@ -21,7 +21,7 @@ select
     total_node_runtime,
     materialization,
     schema_name
-from {{ ref('stg_execution') }}
+from {{ ref('dbt_observability_marts', 'stg_execution') }}
 union
 select
     command_invocation_id,
@@ -41,4 +41,4 @@ select
     0 as total_node_runtime,
     'source' as materialization,
     schema_name
-from {{ ref('stg_source') }}
+from {{ ref('dbt_observability_marts', 'stg_source') }}

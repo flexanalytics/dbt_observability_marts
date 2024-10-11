@@ -18,4 +18,4 @@ select
     path,
     checksum,
     strategy
-from {{ ref('stg_snapshot') }}
+from {{ ref('dbt_observability_marts', 'stg_snapshot') }}

@@ -29,7 +29,7 @@ executions as (
         lead(run_started_at)
             over (partition by node_id order by run_started_at)
             as next_run_started_at
-    from {{ ref('int_execution') }}
+    from {{ ref('dbt_observability_marts', 'int_execution') }}
 ),
 
 _raw_columns as (
@@ -66,7 +66,7 @@ _raw_columns as (
                 order by excs.run_started_at
             )
             as raw_pre_data_type
-    from {{ ref('stg_column') }} as cols
+    from {{ ref('dbt_observability_marts', 'stg_column') }} as cols
     inner join executions
         as excs on cols.command_invocation_id = excs.command_invocation_id
     and cols.node_id = excs.node_id
