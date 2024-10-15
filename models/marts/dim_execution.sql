@@ -15,7 +15,7 @@ with
             materialization,
             schema_name,
             run_started_at
-        from {{ ref('int_execution') }}
+        from {{ ref('dbt_observability_marts', 'int_execution') }}
     ),
 
     most_recent as (

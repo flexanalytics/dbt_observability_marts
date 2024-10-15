@@ -25,4 +25,4 @@ select
     row_stdev,
     is_metric,
     column_values
-from {{ ref('stg_column') }}
+from {{ ref('dbt_observability_marts', 'stg_column') }}

@@ -16,4 +16,4 @@ select
     test_path,
     tags,
     test_metadata
-from {{ ref('stg_test') }}
+from {{ ref('dbt_observability_marts', 'stg_test') }}

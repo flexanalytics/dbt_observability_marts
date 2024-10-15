@@ -17,7 +17,7 @@ with
             package_name,
             path,
             checksum
-        from {{ ref('int_seed') }}
+        from {{ ref('dbt_observability_marts', 'int_seed') }}
     )
 
 select

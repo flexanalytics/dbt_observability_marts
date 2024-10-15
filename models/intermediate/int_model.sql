@@ -22,4 +22,4 @@ select
     meta,
     description,
     total_rowcount
-from {{ ref('stg_model') }}
+from {{ ref('dbt_observability_marts', 'stg_model') }}

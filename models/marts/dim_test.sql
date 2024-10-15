@@ -17,7 +17,7 @@ with
             test_path,
             tags,
             test_metadata
-        from {{ ref('int_test') }}
+        from {{ ref('dbt_observability_marts', 'int_test') }}
     )
 
 select

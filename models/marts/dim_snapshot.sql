@@ -19,7 +19,7 @@ with
             path,
             checksum,
             strategy
-        from {{ ref('int_snapshot') }}
+        from {{ ref('dbt_observability_marts', 'int_snapshot') }}
     )
 
 select

@@ -20,7 +20,7 @@ source as (
         identifier,
         loaded_at_field,
         freshness
-    from {{ ref('int_source') }}
+    from {{ ref('dbt_observability_marts', 'int_source') }}
 )
 
 select
