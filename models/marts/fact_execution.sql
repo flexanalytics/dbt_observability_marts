@@ -34,11 +34,11 @@ with
             end
             as total_rowcount
         from
-            {{ ref('int_execution') }} e
-        left outer join {{ ref('stg_model') }} m on
+            {{ ref('dbt_observability_marts', 'int_execution') }} e
+        left outer join {{ ref('dbt_observability_marts', 'stg_model') }} m on
             e.command_invocation_id = m.command_invocation_id
             and e.node_id = m.node_id
-        left outer join {{ ref('stg_source') }} s on
+        left outer join {{ ref('dbt_observability_marts', 'stg_source') }} s on
             e.command_invocation_id = s.command_invocation_id
             and e.node_id = s.node_id
     )

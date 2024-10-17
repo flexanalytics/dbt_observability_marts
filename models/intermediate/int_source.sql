@@ -22,4 +22,4 @@ select
     loaded_at_field,
     freshness,
     total_rowcount
-from {{ ref('stg_source') }}
+from {{ ref('dbt_observability_marts', 'stg_source') }}

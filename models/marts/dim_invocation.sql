@@ -29,7 +29,7 @@ with
                 partition by cast(run_started_at as date)
                 order by run_started_at desc
                 ) as invocation_rank_per_day
-        from {{ ref('stg_invocation') }}
+        from {{ ref('dbt_observability_marts', 'stg_invocation') }}
     )
 
 select

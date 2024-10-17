@@ -60,7 +60,7 @@ models:
             - from_field: exposure_key
               exp: '='
               to_field: exposure_key
-        - to: dim_date_observability
+        - to: dim_date__observability
           type: inner
           join_on:
             - from_field: date_key

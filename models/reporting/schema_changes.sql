@@ -29,7 +29,7 @@ executions as (
         lead(run_started_at)
             over (partition by node_id order by run_started_at)
             as next_run_started_at
-    from {{ ref('int_execution') }}
+    from {{ ref('dbt_observability_marts', 'int_execution') }}
 ),
 
 _raw_columns as (
@@ -66,7 +66,7 @@ _raw_columns as (
                 order by excs.run_started_at
             )
             as raw_pre_data_type
-    from {{ ref('stg_column') }} as cols
+    from {{ ref('dbt_observability_marts', 'stg_column') }} as cols
     inner join executions
         as excs on cols.command_invocation_id = excs.command_invocation_id
     and cols.node_id = excs.node_id
@@ -108,7 +108,11 @@ added as (
         null as precise_data_type,
         null as precise_pre_data_type,
         {{ dbt.concat(['resource_type', "'_added'"]) }} as change_type,
-        {{ dbt.concat(["upper(substring(resource_type, 1, 1))", "lower(substring(resource_type, 2, len(resource_type)))", "' Added'"]) }} as change_type_desc,
+        {{ dbt.concat([
+            "upper(substring(resource_type, 1, 1))",
+            "lower(substring(resource_type, 2, " ~ dbt.length('resource_type') ~ "))",
+            "' Added'"
+        ]) }} as change_type_desc,
         run_started_at as detected_at
     from
         executions
@@ -131,7 +135,11 @@ first_observed as (
         null as precise_data_type,
         null as precise_pre_data_type,
         {{ dbt.concat(['resource_type', "'_first_observed'"]) }} as change_type,
-        {{ dbt.concat(["upper(substring(resource_type, 1, 1))", "lower(substring(resource_type, 2, len(resource_type)))", "' First Observed'"]) }} as change_type_desc,
+        {{ dbt.concat([
+            "upper(substring(resource_type, 1, 1))",
+            "lower(substring(resource_type, 2, " ~ dbt.length('resource_type') ~ "))",
+            "' First Observed'"
+        ]) }} as change_type_desc,
         run_started_at as detected_at
     from
         executions
@@ -154,9 +162,13 @@ removed as (
         null as generic_pre_data_type,
         null as precise_data_type,
         null as precise_pre_data_type,
-        run_started_at as detected_at,
         {{ dbt.concat(['resource_type', "'_removed'"]) }} as change_type,
-        {{ dbt.concat(["upper(substring(resource_type, 1, 1))", "lower(substring(resource_type, 2, len(resource_type)))", "' Removed'"]) }} as change_type_desc
+        {{ dbt.concat([
+            "upper(substring(resource_type, 1, 1))",
+            "lower(substring(resource_type, 2, " ~ dbt.length('resource_type') ~ "))",
+            "' Removed'"
+        ]) }} as change_type_desc,
+        run_started_at as detected_at
     from
         executions
     where

@@ -20,7 +20,7 @@ with
             url,
             package_name,
             depends_on_nodes
-        from {{ ref('int_exposure') }}
+        from {{ ref('dbt_observability_marts', 'int_exposure') }}
     )
 
 select

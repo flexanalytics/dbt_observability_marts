@@ -16,4 +16,4 @@ select
     package_name,
     path,
     checksum
-from {{ ref('stg_seed') }}
+from {{ ref('dbt_observability_marts', 'stg_seed') }}

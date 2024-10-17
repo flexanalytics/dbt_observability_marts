@@ -16,7 +16,7 @@ with
             tags,
             meta,
             description
-        from {{ ref('int_column') }}
+        from {{ ref('dbt_observability_marts', 'int_column') }}
     )
 
 select

@@ -18,4 +18,4 @@ select
     url,
     package_name,
     depends_on_nodes
-from {{ ref('stg_exposure') }}
+from {{ ref('dbt_observability_marts', 'stg_exposure') }}
