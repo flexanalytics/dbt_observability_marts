@@ -30,7 +30,7 @@ with
         from {{ ref('dbt_observability_marts', 'int_column') }}
     )
 
-select
+select distinct
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id', 'column_name']) }} as column_key,
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as execution_key,
     is_documented,
