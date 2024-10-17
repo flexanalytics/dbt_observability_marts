@@ -88,13 +88,6 @@ models:
           hidden: true
         constraints:
           - type: not_null
-      - name: column_key
-        description: ''
-        data_type: text
-        meta:
-          hidden: true
-        constraints:
-          - type: not_null
       - name: test_key
         description: ''
         data_type: text

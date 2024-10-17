@@ -46,7 +46,6 @@ select
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as execution_key,
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id']) }} as invocation_key,
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as model_key,
-    {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as column_key,
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as test_key,
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as seed_key,
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as source_key,
