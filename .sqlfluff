@@ -1,6 +1,6 @@
 [sqlfluff]
 # One of [raw|jinja|python|placeholder]
-dialect = snowflake
+dialect = ansi
 templater = dbt
 sql_file_exts = .sql
 max_line_length = 120
