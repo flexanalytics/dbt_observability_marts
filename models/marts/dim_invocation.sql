@@ -22,13 +22,30 @@ with
             dbt_cloud_run_reason_category,
             dbt_cloud_run_reason,
             env_vars,
-            dbt_vars
+            dbt_vars,
+            run_started_at,
+            rank() over (order by run_started_at desc) as invocation_rank,
+            rank() over (
+                partition by cast(run_started_at as date)
+                order by run_started_at desc
+                ) as invocation_rank_per_day
         from {{ ref('dbt_observability_marts', 'stg_invocation') }}
     )
 
 select
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id']) }} as invocation_key,
     command_invocation_id,
+    run_started_at,
+    invocation_rank,
+    case
+        when invocation_rank = 1 then 'Yes'
+        else 'No'
+    end as most_recent_run,
+    invocation_rank_per_day,
+    case
+        when invocation_rank_per_day = 1 then 'Yes'
+        else 'No'
+    end as most_recent_run_per_day,
     dbt_version,
     project_name,
     dbt_command,
