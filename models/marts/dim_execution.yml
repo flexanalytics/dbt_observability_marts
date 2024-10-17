@@ -118,7 +118,7 @@ models:
         meta:
           label: Most Recent Node Run
       - name: most_recent_node_run_per_day
-        description: '"Yeas" if this is the most recent run for the node on that day, otherwise "No"'
+        description: '"Yes" if this is the most recent run for the node on that day, otherwise "No"'
         data_type: text
         meta:
           label: Most Recent Node Run Per Day
