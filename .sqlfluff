@@ -1,7 +1,7 @@
 [sqlfluff]
 # One of [raw|jinja|python|placeholder]
 dialect = ansi
-templater = dbt
+templater = jinja
 sql_file_exts = .sql
 max_line_length = 120
 exclude_rules = ST06
