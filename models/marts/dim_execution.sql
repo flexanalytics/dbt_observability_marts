@@ -19,7 +19,7 @@ with
             thread_id,
             compile_started_at,
             query_completed_at,
-            rank() over (order by run_started_at desc) as run_rank,
+            rank() over (partition by project order by run_started_at desc) as run_rank,
             rank() over (partition by node_id order by run_started_at desc) as node_rank,
             rank() over (partition by node_id, cast(run_started_at as date) order by run_started_at desc) as node_rank_per_day
         from {{ ref('dbt_observability_marts', 'int_execution') }}

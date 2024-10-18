@@ -27,7 +27,7 @@ models:
         meta:
           label: Invocation Order
       - name: most_recent_run
-        description: '"Yes" if this is the most recent invocation for all time, otherwise "No"'
+        description: '"Yes" if this is the most recent invocation for all time, partitioned by project, otherwise "No"'
         meta:
           label: Most Recent Run
       - name: invocation_rank_per_day
