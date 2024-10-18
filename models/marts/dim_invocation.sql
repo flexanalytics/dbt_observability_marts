@@ -24,9 +24,9 @@ with
             env_vars,
             dbt_vars,
             run_started_at,
-            rank() over (order by run_started_at desc) as invocation_rank,
+            rank() over (partition by project_name order by run_started_at desc) as invocation_rank,
             rank() over (
-                partition by cast(run_started_at as date)
+                partition by project_name, cast(run_started_at as date)
                 order by run_started_at desc
                 ) as invocation_rank_per_day
         from {{ ref('dbt_observability_marts', 'stg_invocation') }}
