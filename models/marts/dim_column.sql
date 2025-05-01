@@ -14,12 +14,18 @@ with
             column_name,
             data_type,
             tags,
-            meta,
+            {% if target.type == 'bigquery' %}
+                TO_JSON_STRING(meta) as meta,
+            {% elif target.type == 'snowflake' %}
+                TO_JSON(meta) as meta,
+            {% else %} 
+                meta,
+            {% endif %}
             description
         from {{ ref('dbt_observability_marts', 'int_column') }}
     )
 
-select
+select distinct
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id', 'column_name']) }} as column_key,
     node_id,
     resource_type,
