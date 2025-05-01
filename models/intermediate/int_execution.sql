@@ -22,7 +22,7 @@ select
     materialization,
     schema_name
 from {{ ref('dbt_observability_marts', 'stg_execution') }}
-union
+union all
 select
     command_invocation_id,
     node_id,
