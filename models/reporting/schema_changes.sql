@@ -270,7 +270,7 @@ with
             run_started_at as detected_at
         from columns
         where generic_data_type != generic_pre_data_type
-        union distinct
+        union all
         select
             node_id,
             command_invocation_id,
@@ -306,7 +306,7 @@ with
             precise_pre_data_type,
             detected_at
         from added
-        union distinct
+        union all
         select
             node_id,
             command_invocation_id,
@@ -322,7 +322,7 @@ with
             precise_pre_data_type,
             detected_at
         from first_observed
-        union distinct
+        union all
         select
             node_id,
             command_invocation_id,
@@ -338,7 +338,7 @@ with
             precise_pre_data_type,
             detected_at
         from removed
-        union distinct
+        union all
         select
             node_id,
             command_invocation_id,
@@ -354,7 +354,7 @@ with
             precise_pre_data_type,
             detected_at
         from columns_added
-        union distinct
+        union all
         select
             node_id,
             command_invocation_id,
@@ -370,7 +370,7 @@ with
             precise_pre_data_type,
             detected_at
         from columns_first_observed
-        union distinct
+        union all
         select
             node_id,
             command_invocation_id,
@@ -386,7 +386,7 @@ with
             precise_pre_data_type,
             detected_at
         from columns_removed
-        union distinct
+        union all
         select
             node_id,
             command_invocation_id,
@@ -404,7 +404,7 @@ with
         from type_changes
     )
 
-select
+select distinct
     {{ dbt_utils.generate_surrogate_key(["command_invocation_id", "node_id"]) }}
         as execution_key,
     node_id,
