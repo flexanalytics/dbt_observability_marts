@@ -37,6 +37,11 @@ models:
     data_type: text
     meta:
       label: Name
+  - name: description
+    description: ''
+    data_type: text
+    meta:
+      label: Description
   - name: depends_on_nodes
     description: ''
     data_type: text

@@ -9,6 +9,7 @@ select
     node_id,
     run_started_at,
     name,
+    description,
     depends_on_nodes,
     package_name,
     test_path,
