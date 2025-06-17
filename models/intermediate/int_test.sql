@@ -11,6 +11,7 @@ select
     {{ dbt.split_part(string_text='node_id', delimiter_text="'.'", part_number=3) }} as resource_name,
     run_started_at,
     name,
+    description,
     depends_on_nodes,
     package_name,
     test_path,
