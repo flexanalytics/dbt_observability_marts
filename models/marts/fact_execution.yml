@@ -180,6 +180,30 @@ models:
                 type: number
                 decimalPlaces: 1
                 suffix: s
+      - name: total_invocation_runtime
+        description: ''
+        data_type: numeric
+        meta:
+          metrics:
+            total_invocation_runtime:
+              label: Total Invocation Runtime
+              type: sum
+              format:
+                type: number
+                decimalPlaces: 1
+                suffix: s
+      - name: runtime_percent_of_total
+        description: 'Node runtime as a percent of total invocation runtime'
+        meta:
+          metrics:
+            runtime_percent_of_total:
+              sql: "${total_node_runtime} / ${total_invocation_runtime}"
+              label: "% of Total Invocation Runtime"
+              type: average
+              format:
+                type: percent
+                decimalPlaces: 1
+                suffix: "%"
       - name: change_from_previous_runtime
         description: 'Percent change from previous runtime'
         meta:
