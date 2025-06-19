@@ -57,6 +57,7 @@ select
     total_node_runtime,
     lag(total_node_runtime) over (partition by node_id order by run_started_at) as previous_runtime,
     avg(total_node_runtime) over (partition by node_id) as average_runtime,
+    sum(total_node_runtime) over (partition by command_invocation_id) as total_invocation_runtime,
     total_rowcount,
     lag(total_rowcount) over (partition by node_id order by run_started_at) as previous_rowcount,
     avg(total_rowcount) over (partition by node_id) as average_rowcount
