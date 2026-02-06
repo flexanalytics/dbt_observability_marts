@@ -14,6 +14,8 @@ models:
         - unique
       - name: command_invocation_id
         description: ''
+        meta:
+          label: Command Invocation ID
       - name: run_started_at
         description: ''
         meta:
