@@ -7,7 +7,7 @@ models:
       display_index: 1
       joins:
         - to: dim_execution
-          type: inner
+          type: left
           join_on:
             - from_field: execution_key
               exp: '='
