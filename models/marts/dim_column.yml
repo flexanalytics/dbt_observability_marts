@@ -4,6 +4,12 @@ models:
     description: ''
     meta:
       label: Column Dimension
+      joins:
+        - to: dim_model
+          type: inner
+          join_on:
+            - from_field: model_key
+              to_field: model_key
     columns:
     - name: column_key
       data_type: text
@@ -23,10 +29,6 @@ models:
       description: ''
       meta:
         hidden: true
-      tests:
-        - relationships:
-            to: ref('dim_model')
-            field: model_key
     - name: node_id
       description: ''
       data_type: text
