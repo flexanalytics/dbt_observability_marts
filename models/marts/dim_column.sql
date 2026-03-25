@@ -18,7 +18,7 @@ with
                 TO_JSON_STRING(meta) as meta,
             {% elif target.type == 'snowflake' %}
                 TO_JSON(meta) as meta,
-            {% else %} 
+            {% else %}
                 meta,
             {% endif %}
             description
@@ -27,6 +27,7 @@ with
 
 select distinct
     {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id', 'column_name']) }} as column_key,
+    {{ dbt_utils.generate_surrogate_key(['command_invocation_id', 'node_id']) }} as model_key,
     node_id,
     resource_type,
     project,
