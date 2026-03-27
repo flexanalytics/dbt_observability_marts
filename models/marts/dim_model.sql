@@ -10,7 +10,7 @@ with
                 'command_invocation_id', 'node_id'
                 ]) }} as model_key,
             {{ dbt_utils.generate_surrogate_key([
-                'models.command_invocation_id'
+                'command_invocation_id'
                 ]) }} as invocation_key,
             command_invocation_id,
             node_id,
