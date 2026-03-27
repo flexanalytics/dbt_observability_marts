@@ -9,6 +9,9 @@ with
             {{ dbt_utils.generate_surrogate_key([
                 'command_invocation_id', 'node_id'
                 ]) }} as model_key,
+            {{ dbt_utils.generate_surrogate_key([
+                'command_invocation_id'
+                ]) }} as invocation_key,
             command_invocation_id,
             node_id,
             run_started_at,
@@ -64,6 +67,7 @@ with
     final as (
         select
             models.model_key,
+            models.invocation_key,
             models.node_id,
             models.resource_type,
             models.project,
