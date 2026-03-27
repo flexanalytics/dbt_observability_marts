@@ -67,6 +67,7 @@ with
     final as (
         select
             models.model_key,
+            models.invocation_key,
             models.node_id,
             models.resource_type,
             models.project,
