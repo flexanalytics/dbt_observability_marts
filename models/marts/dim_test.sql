@@ -35,8 +35,8 @@ with
         from {{ ref('dbt_observability_marts', 'int_test') }}
     ),
 
-    -- one model per test so dim_test stays one row per test; relationship tests
-    -- cover two models -- the secondary is kept as test_to_model.
+    -- one model / one source per test so dim_test stays one row per test;
+    -- relationship tests cover two models -- the secondary is kept as test_to_model.
     test_model_map as (
         select
             command_invocation_id as map_invocation_id,
@@ -44,9 +44,23 @@ with
             model_key,
             row_number() over (
                 partition by command_invocation_id, test_node_id
-                order by model_node_id
+                order by tested_node_id
             ) as model_rank
         from {{ ref('dbt_observability_marts', 'int_test_model') }}
+        where tested_resource_type = 'model'
+    ),
+
+    test_source_map as (
+        select
+            command_invocation_id as map_invocation_id,
+            test_node_id as map_node_id,
+            source_key,
+            row_number() over (
+                partition by command_invocation_id, test_node_id
+                order by tested_node_id
+            ) as source_rank
+        from {{ ref('dbt_observability_marts', 'int_test_model') }}
+        where tested_resource_type = 'source'
     )
 
 select
@@ -58,6 +72,7 @@ select
         'command_invocation_id'
     ]) }} as invocation_key,
     test_model_map.model_key,
+    test_source_map.source_key,
     node_id,
     resource_type,
     project,
@@ -87,3 +102,7 @@ left outer join test_model_map
     on test.command_invocation_id = test_model_map.map_invocation_id
         and test.node_id = test_model_map.map_node_id
         and test_model_map.model_rank = 1
+left outer join test_source_map
+    on test.command_invocation_id = test_source_map.map_invocation_id
+        and test.node_id = test_source_map.map_node_id
+        and test_source_map.source_rank = 1

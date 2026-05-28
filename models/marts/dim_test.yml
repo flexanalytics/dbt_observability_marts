@@ -26,6 +26,15 @@ models:
     - relationships:
         to: ref('dim_model')
         field: model_key
+  - name: source_key
+    description: 'Foreign key to dim_source for the source this test covers (null for model-targeted tests)'
+    data_type: text
+    meta:
+      hidden: true
+    tests:
+    - relationships:
+        to: ref('dim_source')
+        field: source_key
   - name: node_id
     description: ''
     data_type: text

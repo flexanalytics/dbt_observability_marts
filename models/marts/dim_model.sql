@@ -53,8 +53,7 @@ with
                 when exists (
                         select 1
                         from {{ ref('dbt_observability_marts', 'int_test_model') }} as test_model
-                        where test_model.command_invocation_id = models.command_invocation_id
-                            and test_model.model_node_id = models.node_id
+                        where test_model.model_key = models.model_key
                     ) then 'Yes'
                 else 'No'
             end as is_tested
