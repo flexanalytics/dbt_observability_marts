@@ -23,6 +23,17 @@ select
     {{ json_extract_scalar('test_metadata', ['name']) }} as test_name,
     {{ json_extract_scalar('test_metadata', ['kwargs', 'model']) }} as test_model,
     {{ json_extract_scalar('test_metadata', ['kwargs', 'column_name']) }} as test_column,
+    -- combination_of_columns is a JSON array; extract it then strip [ ] " to a plain list
+    {{ dbt.replace(
+        dbt.replace(
+            dbt.replace(
+                json_extract_array('test_metadata', ['kwargs', 'combination_of_columns']),
+                "'\"'", "''"
+            ),
+            "'['", "''"
+        ),
+        "']'", "''"
+    ) }} as test_combination_of_columns,
     {{ json_extract_scalar('test_metadata', ['kwargs', 'value']) }} as test_column_value,
     {{ dbt.safe_cast(json_extract_scalar('test_metadata', ['kwargs', 'min_value']), dbt.type_int()) }}
         as test_column_min_value,

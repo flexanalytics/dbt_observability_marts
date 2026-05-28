@@ -101,6 +101,11 @@ models:
     data_type: text
     meta:
       label: Test Column
+  - name: test_combination_of_columns
+    description: 'Comma-separated columns for composite tests, e.g. unique_combination_of_columns (test_metadata.kwargs.combination_of_columns)'
+    data_type: text
+    meta:
+      label: Test Combination Of Columns
   - name: test_column_value
     description: 'Expected value for accepted_values-style tests (test_metadata.kwargs.value)'
     data_type: text
