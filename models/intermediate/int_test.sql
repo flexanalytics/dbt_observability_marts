@@ -15,6 +15,27 @@ select
     depends_on_nodes,
     package_name,
     test_path,
+    {{ dbt.split_part(string_text='test_path', delimiter_text="'/'", part_number=2) }} as test_layer,
     tags,
-    test_metadata
+    test_metadata,
+    -- parsed test_metadata attributes (see macros/json_extract_scalar.sql)
+    {{ json_extract_scalar('test_metadata', ['namespace']) }} as test_package,
+    {{ json_extract_scalar('test_metadata', ['name']) }} as test_name,
+    {{ json_extract_scalar('test_metadata', ['kwargs', 'model']) }} as test_model,
+    {{ json_extract_scalar('test_metadata', ['kwargs', 'column_name']) }} as test_column,
+    {{ json_extract_scalar('test_metadata', ['kwargs', 'value']) }} as test_column_value,
+    {{ dbt.safe_cast(json_extract_scalar('test_metadata', ['kwargs', 'min_value']), dbt.type_int()) }}
+        as test_column_min_value,
+    {{ dbt.safe_cast(json_extract_scalar('test_metadata', ['kwargs', 'max_value']), dbt.type_int()) }}
+        as test_column_max_value,
+    {{ json_extract_scalar('test_metadata', ['kwargs', 'from_condition']) }}
+        as test_relationship_from_model_condition,
+    coalesce(
+        {{ json_extract_scalar('test_metadata', ['kwargs', 'to']) }},
+        {{ json_extract_scalar('test_metadata', ['kwargs', 'compare_model']) }}
+    ) as test_to_model,
+    {{ json_extract_scalar('test_metadata', ['kwargs', 'field']) }} as test_relationship_to_field,
+    {{ json_extract_scalar('test_metadata', ['kwargs', 'to_condition']) }}
+        as test_relationship_to_model_condition,
+    {{ json_extract_scalar('test_metadata', ['kwargs', 'expression']) }} as test_column_expression
 from {{ ref('dbt_observability_marts', 'stg_test') }}
