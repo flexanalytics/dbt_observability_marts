@@ -106,7 +106,7 @@ models:
     meta:
       label: Test Model
   - name: test_column
-    description: 'Column under test (test_metadata.kwargs.column_name)'
+    description: 'Column under test. Prefers the manifest first-class column_name (set for every column-attached test); falls back to test_metadata.kwargs.column_name for data predating that capture.'
     data_type: text
     meta:
       label: Test Column

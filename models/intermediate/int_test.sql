@@ -22,7 +22,12 @@ select
     {{ json_extract_scalar('test_metadata', ['namespace']) }} as test_package,
     {{ json_extract_scalar('test_metadata', ['name']) }} as test_name,
     {{ json_extract_scalar('test_metadata', ['kwargs', 'model']) }} as test_model,
-    {{ json_extract_scalar('test_metadata', ['kwargs', 'column_name']) }} as test_column,
+    -- prefer the manifest's first-class column_name (set for every column-attached
+    -- test regardless of kwargs); fall back to kwargs for data predating that capture
+    coalesce(
+        nullif(column_name, ''),
+        {{ json_extract_scalar('test_metadata', ['kwargs', 'column_name']) }}
+    ) as test_column,
     -- combination_of_columns is a JSON array; extract it then strip [ ] " to a plain list
     {{ dbt.replace(
         dbt.replace(

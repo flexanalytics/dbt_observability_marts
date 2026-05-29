@@ -44,7 +44,7 @@ with
             model_key,
             row_number() over (
                 partition by command_invocation_id, test_node_id
-                order by tested_node_id
+                order by is_attached desc, tested_node_id
             ) as model_rank
         from {{ ref('dbt_observability_marts', 'int_test_model') }}
         where tested_resource_type = 'model'
@@ -57,7 +57,7 @@ with
             source_key,
             row_number() over (
                 partition by command_invocation_id, test_node_id
-                order by tested_node_id
+                order by is_attached desc, tested_node_id
             ) as source_rank
         from {{ ref('dbt_observability_marts', 'int_test_model') }}
         where tested_resource_type = 'source'

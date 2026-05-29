@@ -22,7 +22,8 @@ with
                 {% else %}
                 depends_on_nodes
             {% endif %})
-                as depends_on_nodes
+                as depends_on_nodes,
+            lower(nullif(attached_node, '')) as attached_node
         from {{ ref('dbt_observability_marts', 'stg_test') }}
     ),
 
@@ -57,7 +58,13 @@ select
     nodes.tested_node_id,
     nodes.tested_resource_type,
     nodes.model_key,
-    nodes.source_key
+    nodes.source_key,
+    -- 1 when this node is the test's first-class attached_node (the primary node
+    -- the test is defined under); lets dim_test pick the right model/source_key
+    case
+        when tests.attached_node = lower(nodes.tested_node_id) then 1
+        else 0
+    end as is_attached
 from tests
 inner join nodes
     on tests.command_invocation_id = nodes.command_invocation_id
