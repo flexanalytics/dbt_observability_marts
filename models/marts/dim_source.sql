@@ -24,6 +24,12 @@ source as (
         loaded_at_field,
         freshness
     from {{ ref('dbt_observability_marts', 'int_source') }}
+),
+
+tested_sources as (
+    select distinct source_key
+    from {{ ref('dbt_observability_marts', 'int_test_model') }}
+    where source_key is not null
 )
 
 select
@@ -41,11 +47,9 @@ select
     loaded_at_field,
     freshness,
     case
-        when exists (
-                select 1
-                from {{ ref('dbt_observability_marts', 'int_test_model') }} as test_model
-                where test_model.source_key = source.source_key
-            ) then 'Yes'
+        when tested_sources.source_key is not null then 'Yes'
         else 'No'
     end as is_tested
 from source
+left outer join tested_sources
+    on source.source_key = tested_sources.source_key

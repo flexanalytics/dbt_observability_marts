@@ -31,6 +31,12 @@ with
         from {{ ref('dbt_observability_marts', 'int_model') }}
     ),
 
+    tested_models as (
+        select distinct model_key
+        from {{ ref('dbt_observability_marts', 'int_test_model') }}
+        where model_key is not null
+    ),
+
     final as (
         select
             models.model_key,
@@ -50,15 +56,12 @@ with
             models.meta,
             models.description,
             case
-                when exists (
-                        select 1
-                        from {{ ref('dbt_observability_marts', 'int_test_model') }} as test_model
-                        where test_model.model_key = models.model_key
-                    ) then 'Yes'
+                when tested_models.model_key is not null then 'Yes'
                 else 'No'
             end as is_tested
         from models
-
+        left outer join tested_models
+            on models.model_key = tested_models.model_key
     )
 
 select * from final
