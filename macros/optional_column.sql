@@ -1,33 +1,41 @@
 {#
-    Render a column reference that tolerates the column being absent from `relation`.
-
-    Returns the bare column when `relation` has it, otherwise
-    `cast(null as <data_type>) as <column_name>`. This lets a staging model stay
-    compatible with upstream observability tables written before a column was added
-    -- when the column is missing we emit null and downstream models fall back
-    (e.g. int_test parsing test_metadata.kwargs).
-
-    Relies only on cross-adapter dbt builtins (load_relation,
-    adapter.get_columns_in_relation, dbt.type_string), so no dispatch is needed.
-    The load_relation guard also keeps it safe when `relation` does not yet exist
-    (e.g. building this model in isolation before its upstream).
-
-    Usage:
-        {{ optional_column(ref('dbt_observability', 'tests'), 'column_name') }}
-        {{ optional_column(my_relation, 'some_int_col', dbt.type_int()) }}
+    Return the lowercased column names of `relation`, or [] when it cannot be
+    inspected (parse phase, or the relation does not exist yet -- e.g. building a
+    model in isolation before its upstream). Cross-adapter: relies only on
+    load_relation + adapter.get_columns_in_relation.
 #}
-{% macro optional_column(relation, column_name, data_type=none) -%}
-    {%- set data_type = data_type if data_type is not none else dbt.type_string() -%}
-    {%- set has_column = false -%}
+{% macro relation_columns(relation) -%}
+    {%- set columns = [] -%}
     {%- if execute -%}
         {%- set loaded = load_relation(relation) -%}
         {%- if loaded is not none -%}
-            {%- set existing = adapter.get_columns_in_relation(loaded)
+            {%- set columns = adapter.get_columns_in_relation(loaded)
                 | map(attribute='name') | map('lower') | list -%}
-            {%- set has_column = (column_name | lower) in existing -%}
         {%- endif -%}
     {%- endif -%}
-    {%- if has_column -%}
+    {{ return(columns) }}
+{%- endmacro %}
+
+{#
+    Render a column reference that tolerates the column being absent from `relation`.
+
+    Returns the bare column when present, otherwise
+    `cast(null as <data_type>) as <column_name>`. This lets a staging model stay
+    compatible with upstream observability tables written before a column was added
+    -- when the column is missing we emit null.
+
+    Pass `available_columns` (from relation_columns) to avoid re-inspecting the
+    relation once per column; when omitted it is looked up per call.
+
+    Usage:
+        {% set cols = relation_columns(my_relation) %}
+        {{ optional_column(my_relation, 'column_name', dbt.type_string(), cols) }}
+#}
+{% macro optional_column(relation, column_name, data_type=none, available_columns=none) -%}
+    {%- set data_type = data_type if data_type is not none else dbt.type_string() -%}
+    {%- set available_columns = available_columns if available_columns is not none
+        else relation_columns(relation) -%}
+    {%- if (column_name | lower) in available_columns -%}
         {{ column_name }}
     {%- else -%}
         cast(null as {{ data_type }}) as {{ column_name }}

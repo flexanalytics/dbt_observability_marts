@@ -3,11 +3,6 @@
         enabled=var('dbt_observability:marts_enabled', true)
     )
 }}
--- Edge list mapping each test to the model OR source it covers, derived from
--- the test's depends_on_nodes. One row per test-covers-node pair (relationship
--- tests produce two rows). model_key is populated for model-targeted tests,
--- source_key for source-targeted tests. Consumed by dim_model.is_tested,
--- dim_source.is_tested, and dim_test.model_key / source_key.
 with
     tests as (
         select
