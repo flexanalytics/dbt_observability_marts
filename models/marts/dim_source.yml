@@ -72,3 +72,8 @@ models:
         data_type: text
         meta:
           label: Freshness
+      - name: is_tested
+        description: ''
+        data_type: text
+        meta:
+          label: Source Is Tested

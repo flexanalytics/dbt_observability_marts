@@ -12,6 +12,29 @@ models:
     tests:
     - not_null
     - unique
+  - name: invocation_key
+    description: ''
+    data_type: text
+    meta:
+      hidden: true
+  - name: model_key
+    description: 'Foreign key to dim_model for the model this test covers (primary model for relationship tests)'
+    data_type: text
+    meta:
+      hidden: true
+    tests:
+    - relationships:
+        to: ref('dim_model')
+        field: model_key
+  - name: source_key
+    description: 'Foreign key to dim_source for the source this test covers (null for model-targeted tests)'
+    data_type: text
+    meta:
+      hidden: true
+    tests:
+    - relationships:
+        to: ref('dim_source')
+        field: source_key
   - name: node_id
     description: ''
     data_type: text
@@ -52,6 +75,11 @@ models:
     data_type: text
     meta:
       label: Test Path
+  - name: test_layer
+    description: 'Second segment of test_path (e.g. the model layer the test lives under)'
+    data_type: text
+    meta:
+      label: Test Layer
   - name: tags
     description: ''
     data_type: text
@@ -62,3 +90,68 @@ models:
     data_type: text
     meta:
       label: Test Metadata
+  - name: test_package
+    description: 'Package namespace the generic test comes from (test_metadata.namespace)'
+    data_type: text
+    meta:
+      label: Test Package
+  - name: test_name
+    description: 'Generic test type, e.g. not_null, unique, relationships (test_metadata.name)'
+    data_type: text
+    meta:
+      label: Test Name
+  - name: test_model
+    description: 'Raw ref()/source() expression the test is attached to (test_metadata.kwargs.model)'
+    data_type: text
+    meta:
+      label: Test Model
+  - name: test_column
+    description: 'Column under test, from the manifest first-class column_name (parsed upstream by dbt_observability). Null for model-level and singular tests.'
+    data_type: text
+    meta:
+      label: Test Column
+  - name: test_combination_of_columns
+    description: 'Comma-separated columns for composite tests, e.g. unique_combination_of_columns (test_metadata.kwargs.combination_of_columns)'
+    data_type: text
+    meta:
+      label: Test Combination Of Columns
+  - name: test_column_value
+    description: 'Expected value for accepted_values-style tests (test_metadata.kwargs.value)'
+    data_type: text
+    meta:
+      label: Test Column Value
+  - name: test_column_min_value
+    description: 'Minimum bound for range tests (test_metadata.kwargs.min_value)'
+    data_type: integer
+    meta:
+      label: Test Column Min Value
+  - name: test_column_max_value
+    description: 'Maximum bound for range tests (test_metadata.kwargs.max_value)'
+    data_type: integer
+    meta:
+      label: Test Column Max Value
+  - name: test_relationship_from_model_condition
+    description: 'from_condition filter on a relationships test (test_metadata.kwargs.from_condition)'
+    data_type: text
+    meta:
+      label: Test Relationship From Model Condition
+  - name: test_to_model
+    description: 'Target model of a relationships test (test_metadata.kwargs.to / compare_model)'
+    data_type: text
+    meta:
+      label: Test To Model
+  - name: test_relationship_to_field
+    description: 'Target field of a relationships test (test_metadata.kwargs.field)'
+    data_type: text
+    meta:
+      label: Test Relationship To Field
+  - name: test_relationship_to_model_condition
+    description: 'to_condition filter on a relationships test (test_metadata.kwargs.to_condition)'
+    data_type: text
+    meta:
+      label: Test Relationship To Model Condition
+  - name: test_column_expression
+    description: 'Expression for expression-style tests (test_metadata.kwargs.expression)'
+    data_type: text
+    meta:
+      label: Test Column Expression

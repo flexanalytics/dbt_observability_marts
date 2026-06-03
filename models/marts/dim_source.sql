@@ -6,7 +6,10 @@
 with
 source as (
     select
-        command_invocation_id,
+        {{ dbt_utils.generate_surrogate_key([
+            'command_invocation_id',
+            'node_id'
+        ]) }} as source_key,
         node_id,
         resource_type,
         project,
@@ -21,13 +24,16 @@ source as (
         loaded_at_field,
         freshness
     from {{ ref('dbt_observability_marts', 'int_source') }}
+),
+
+tested_sources as (
+    select distinct source_key
+    from {{ ref('dbt_observability_marts', 'int_test_model') }}
+    where source_key is not null
 )
 
 select
-    {{ dbt_utils.generate_surrogate_key([
-        'command_invocation_id',
-        'node_id'
-    ]) }} as source_key,
+    source.source_key,
     node_id,
     resource_type,
     project,
@@ -39,5 +45,11 @@ select
     name,
     identifier,
     loaded_at_field,
-    freshness
+    freshness,
+    case
+        when tested_sources.source_key is not null then 'Yes'
+        else 'No'
+    end as is_tested
 from source
+left outer join tested_sources
+    on source.source_key = tested_sources.source_key

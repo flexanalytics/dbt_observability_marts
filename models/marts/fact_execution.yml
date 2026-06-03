@@ -144,6 +144,59 @@ models:
           hidden: true
         constraints:
           - type: not_null
+      - name: status
+        description: 'Execution result status (e.g. pass, fail, error, warn, success)'
+        data_type: text
+        meta:
+          label: Status
+      - name: is_pass
+        description: 'Flag (1/0) indicating the node execution passed'
+        data_type: numeric
+        meta:
+          metrics:
+            passed:
+              sql: "${is_pass}"
+              label: Passed
+              type: sum
+              format:
+                type: number
+                decimalPlaces: 0
+      - name: is_failure
+        description: 'Flag (1/0) indicating the node execution failed or errored'
+        data_type: numeric
+        meta:
+          metrics:
+            failed:
+              sql: "${is_failure}"
+              label: Failed
+              type: sum
+              format:
+                type: number
+                decimalPlaces: 0
+      - name: is_warn
+        description: 'Flag (1/0) indicating the node execution returned a warning'
+        data_type: numeric
+        meta:
+          metrics:
+            warned:
+              sql: "${is_warn}"
+              label: Warned
+              type: sum
+              format:
+                type: number
+                decimalPlaces: 0
+      - name: pass_rate
+        description: 'Share of node executions that passed'
+        meta:
+          metrics:
+            pass_rate:
+              sql: "${is_pass}"
+              label: Pass Rate
+              type: average
+              format:
+                type: percent
+                decimalPlaces: 1
+                suffix: "%"
       - name: total_node_runtime
         description: ''
         data_type: numeric
