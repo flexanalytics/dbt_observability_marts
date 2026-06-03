@@ -1,6 +1,6 @@
-# DBT Observability Unification Project
+# dbt Observability Marts Project
 
-This project is designed to unify all source tables from the `dbt_observability` package, providing a comprehensive view of your observability data across different environments. It's perfect for data teams looking to consolidate observability metrics and improve data monitoring and analysis.
+This project is designed to unify all source tables from the [dbt_observability](https://github.com/flexanalytics/dbt_observability/) package into analytics-ready dimension and fact marts, providing a comprehensive view of your observability data across different environments. It's perfect for data teams looking to consolidate observability metrics and improve data monitoring and analysis.
 
 ## Getting Started
 
