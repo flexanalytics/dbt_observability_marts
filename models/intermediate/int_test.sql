@@ -24,8 +24,11 @@ select
     column_name as test_column,
     test_combination_of_columns,
     test_column_value,
-    {{ dbt.safe_cast('test_column_min_value', dbt.type_int()) }} as test_column_min_value,
-    {{ dbt.safe_cast('test_column_max_value', dbt.type_int()) }} as test_column_max_value,
+    -- null out blank/whitespace before casting: upstream stores a blank (not null) for absent
+    -- values, and safe_cast is a plain cast on some adapters (e.g. Redshift), so cast(' ' as
+    -- int) errors. ltrim/rtrim (not trim) so it stays valid on SQL Server < 2017.
+    {{ dbt.safe_cast("nullif(rtrim(ltrim(test_column_min_value)), '')", dbt.type_int()) }} as test_column_min_value,
+    {{ dbt.safe_cast("nullif(rtrim(ltrim(test_column_max_value)), '')", dbt.type_int()) }} as test_column_max_value,
     test_relationship_from_model_condition,
     test_to_model,
     test_relationship_to_field,
