@@ -2,78 +2,93 @@ version: 2
 models:
   - name: dim_source
     description: ''
-    meta:
-      label: Source Dimension
+    config:
+      meta:
+        label: Source Dimension
     columns:
       - name: source_key
         description: ''
-        meta:
-          hidden: true
+        config:
+          meta:
+            hidden: true
         tests:
           - not_null
           - unique
       - name: node_id
         description: ''
         data_type: text
-        meta:
-          label: Node ID
+        config:
+          meta:
+            label: Node ID
       - name: resource_type
         description: ''
         data_type: text
-        meta:
-          label: Resource Type
+        config:
+          meta:
+            label: Resource Type
       - name: project
         description: ''
         data_type: text
-        meta:
-          label: Project
+        config:
+          meta:
+            label: Project
       - name: resource_name
         description: ''
         data_type: text
-        meta:
-          label: Resource Name
+        config:
+          meta:
+            label: Resource Name
       - name: database_name
         description: ''
         data_type: text
-        meta:
-          label: Database Name
+        config:
+          meta:
+            label: Database Name
       - name: schema_name
         description: ''
         data_type: text
-        meta:
-          label: Schema Name
+        config:
+          meta:
+            label: Schema Name
       - name: source_name
         description: ''
         data_type: text
-        meta:
-          label: Source Name
+        config:
+          meta:
+            label: Source Name
       - name: loader
         description: ''
         data_type: text
-        meta:
-          label: Loader
+        config:
+          meta:
+            label: Loader
       - name: name
         description: ''
         data_type: text
-        meta:
-          label: Name
+        config:
+          meta:
+            label: Name
       - name: identifier
         description: ''
         data_type: text
-        meta:
-          label: Identifier
+        config:
+          meta:
+            label: Identifier
       - name: loaded_at_field
         description: ''
         data_type: text
-        meta:
-          label: Loaded At Field
+        config:
+          meta:
+            label: Loaded At Field
       - name: freshness
         description: ''
         data_type: text
-        meta:
-          label: Freshness
+        config:
+          meta:
+            label: Freshness
       - name: is_tested
         description: ''
         data_type: text
-        meta:
-          label: Source Is Tested
+        config:
+          meta:
+            label: Source Is Tested
