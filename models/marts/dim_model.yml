@@ -2,88 +2,105 @@ version: 2
 models:
   - name: dim_model
     description: ''
-    meta:
-      label: Model Dimension
+    config:
+      meta:
+        label: Model Dimension
     columns:
       - name: model_key
         description: ''
-        meta:
-          hidden: true
+        config:
+          meta:
+            hidden: true
         tests:
           - not_null
           - unique
       - name: node_id
         description: ''
         data_type: text
-        meta:
-          label: Node ID
+        config:
+          meta:
+            label: Node ID
       - name: resource_type
         description: ''
         data_type: text
-        meta:
-          label: Resource Type
+        config:
+          meta:
+            label: Resource Type
       - name: project
         description: ''
         data_type: text
-        meta:
-          label: Project
+        config:
+          meta:
+            label: Project
       - name: resource_name
         description: ''
         data_type: text
-        meta:
-          label: Resource Name
+        config:
+          meta:
+            label: Resource Name
       - name: database_name
         description: ''
         data_type: text
-        meta:
-          label: Database Name
+        config:
+          meta:
+            label: Database Name
       - name: schema_name
         description: ''
         data_type: text
-        meta:
-          label: Schema Name
+        config:
+          meta:
+            label: Schema Name
       - name: name
         description: ''
         data_type: text
-        meta:
-          label: Name
+        config:
+          meta:
+            label: Name
       - name: package_name
         description: ''
         data_type: text
-        meta:
-          label: Package Name
+        config:
+          meta:
+            label: Package Name
       - name: path
         description: ''
         data_type: text
-        meta:
-          label: Path
+        config:
+          meta:
+            label: Path
       - name: checksum
         description: ''
         data_type: text
-        meta:
-          label: Checksum
+        config:
+          meta:
+            label: Checksum
       - name: materialization
         description: ''
         data_type: text
-        meta:
-          label: Materialization
+        config:
+          meta:
+            label: Materialization
       - name: tags
         description: ''
         data_type: text
-        meta:
-          label: Tags
+        config:
+          meta:
+            label: Tags
       - name: meta
         description: ''
         data_type: text
-        meta:
-          label: Meta
+        config:
+          meta:
+            label: Meta
       - name: description
         description: ''
         data_type: text
-        meta:
-          label: Description
+        config:
+          meta:
+            label: Description
       - name: is_tested
         description: ''
         data_type: text
-        meta:
-          label: Model Is Tested
+        config:
+          meta:
+            label: Model Is Tested

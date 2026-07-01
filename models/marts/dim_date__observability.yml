@@ -3,16 +3,17 @@ models:
   - name: dim_date__observability
     config:
       alias: dim_date
+      meta:
+        label: Date Dimension
     description: ""
-    meta:
-      label: Date Dimension
     columns:
       - name: date_key
         description: ""
         data_type: text
-        meta:
-          label: date_key
-          hidden: true
+        config:
+          meta:
+            label: date_key
+            hidden: true
         tests:
           - not_null
           - unique
@@ -24,94 +25,112 @@ models:
       - name: date_full
         description: ""
         data_type: date
-        meta:
-          label: Date Full
-          datatype: date
-          format:
-            type: date
-            pattern: YYYY-MM-DD
+        config:
+          meta:
+            label: Date Full
+            datatype: date
+            format:
+              type: date
+              pattern: YYYY-MM-DD
       - name: fiscal_year
         description: ""
-        meta:
-          label: Fiscal Year
+        config:
+          meta:
+            label: Fiscal Year
         data_type: integer
       - name: fiscal_quarter
         description: ""
-        meta:
-          label: Fiscal Quarter
+        config:
+          meta:
+            label: Fiscal Quarter
         data_type: integer
       - name: fiscal_month
         description: ""
-        meta:
-          label: Fiscal Month
+        config:
+          meta:
+            label: Fiscal Month
         data_type: integer
       - name: fiscal_month_name
         description: ""
-        meta:
-          label: Fiscal Month Name (Full)
+        config:
+          meta:
+            label: Fiscal Month Name (Full)
         data_type: text
       - name: fiscal_month_abbrev
         description: ""
-        meta:
-          label: Fiscal Month Name (Abbrev)
+        config:
+          meta:
+            label: Fiscal Month Name (Abbrev)
         data_type: text
       - name: calendar_year
         description: ""
-        meta:
-          label: Calendar Year
+        config:
+          meta:
+            label: Calendar Year
         data_type: integer
       - name: calendar_quarter
         description: ""
-        meta:
-          label: Calendar Quarter
+        config:
+          meta:
+            label: Calendar Quarter
         data_type: integer
       - name: calendar_month_nbr
         description: ""
-        meta:
-          label: Calendar Month Number
+        config:
+          meta:
+            label: Calendar Month Number
         data_type: integer
       - name: calendar_month_name
         description: ""
-        meta:
-          label: Calendar Month Name (Full)
+        config:
+          meta:
+            label: Calendar Month Name (Full)
         data_type: text
       - name: calendar_month_abbrev
         description: ""
-        meta:
-          label: Calendar Month Name (Abbrev)
+        config:
+          meta:
+            label: Calendar Month Name (Abbrev)
         data_type: text
       - name: calendar_week_of_year
         description: ""
-        meta:
-          label: Calendar Week of Year
+        config:
+          meta:
+            label: Calendar Week of Year
         data_type: integer
       - name: calendar_day_of_year
         description: ""
-        meta:
-          label: Calendar Day of Year
+        config:
+          meta:
+            label: Calendar Day of Year
         data_type: integer
       - name: day_of_month
         description: ""
-        meta:
-          label: Day of Month
+        config:
+          meta:
+            label: Day of Month
         data_type: integer
       - name: day_of_week
         description: ""
-        meta:
-          label: Day of Week
+        config:
+          meta:
+            label: Day of Week
         data_type: integer
       - name: day_of_week_abbrev
         description: ""
-        meta:
-          label: Day of Week (Abbrev)
+        config:
+          meta:
+            label: Day of Week (Abbrev)
         data_type: text
       - name: month_day_num
         description: ""
-        meta:
-          label: Month Day Number
+        config:
+          meta:
+            label: Month Day Number
         data_type: text
       - name: month_day_desc
         description: ""
-        meta:
-          label: Month Day Description
+        config:
+          meta:
+            label: Month Day Description
         data_type: text
