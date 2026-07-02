@@ -1,0 +1,88 @@
+version: 2
+models:
+  - name: observability__dim_column
+    description: ''
+    config:
+      meta:
+        label: Column Dimension
+        joins:
+          - to: observability__dim_model
+            type: inner
+            join_on:
+              - from_field: model_key
+                to_field: model_key
+    columns:
+      - name: column_key
+        data_type: text
+        description: ''
+        tests:
+          - not_null
+          - unique
+        config:
+          meta:
+            label: column_key
+            hidden: true
+        constraints:
+          - type: not_null
+          - type: unique
+          - type: primary_key
+            warn_unenforced: false
+      - name: model_key
+        description: ''
+        config:
+          meta:
+            hidden: true
+      - name: node_id
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Node ID
+      - name: resource_type
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Resource Type
+      - name: project
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Project
+      - name: resource_name
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Resource Name
+      - name: column_name
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Column Name
+      - name: data_type
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Data Type
+      - name: tags
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Tags
+      - name: meta
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Meta
+      - name: description
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Description
