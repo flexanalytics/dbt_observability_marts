@@ -32,7 +32,7 @@ models:
                 to: ref('dim_model')
                 field: model_key
       - name: source_key
-        description: 'Foreign key to dim_source for the source this test covers (null for model-targeted tests)'
+        description: 'Foreign key to dim_source__observability for the source this test covers (null for model-targeted tests)'
         data_type: text
         config:
           meta:
@@ -40,7 +40,7 @@ models:
         tests:
           - relationships:
               arguments:
-                to: ref('dim_source')
+                to: ref('dim_source__observability')
                 field: source_key
       - name: node_id
         description: ''

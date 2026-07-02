@@ -37,7 +37,7 @@ models:
               - from_field: seed_key
                 exp: '='
                 to_field: seed_key
-          - to: dim_source
+          - to: dim_source__observability
             type: inner
             join_on:
               - from_field: source_key

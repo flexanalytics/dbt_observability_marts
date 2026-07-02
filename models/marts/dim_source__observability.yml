@@ -1,8 +1,9 @@
 version: 2
 models:
-  - name: dim_source
+  - name: dim_source__observability
     description: ''
     config:
+      alias: dim_source
       meta:
         label: Source Dimension
     columns:
