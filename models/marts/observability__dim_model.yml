@@ -1,0 +1,106 @@
+version: 2
+models:
+  - name: observability__dim_model
+    description: ''
+    config:
+      meta:
+        label: Model Dimension
+    columns:
+      - name: model_key
+        description: ''
+        config:
+          meta:
+            hidden: true
+        tests:
+          - not_null
+          - unique
+      - name: node_id
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Node ID
+      - name: resource_type
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Resource Type
+      - name: project
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Project
+      - name: resource_name
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Resource Name
+      - name: database_name
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Database Name
+      - name: schema_name
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Schema Name
+      - name: name
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Name
+      - name: package_name
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Package Name
+      - name: path
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Path
+      - name: checksum
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Checksum
+      - name: materialization
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Materialization
+      - name: tags
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Tags
+      - name: meta
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Meta
+      - name: description
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Description
+      - name: is_tested
+        description: ''
+        data_type: text
+        config:
+          meta:
+            label: Model Is Tested

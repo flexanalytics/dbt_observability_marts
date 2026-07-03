@@ -1,46 +1,46 @@
 version: 2
 models:
-  - name: stg_column
+  - name: observability__stg_column
     config:
       meta:
         hidden: true
-  - name: stg_date
+  - name: observability__stg_date
     config:
       meta:
         hidden: true
-  - name: stg_execution
+  - name: observability__stg_execution
     config:
       meta:
         hidden: true
-  - name: stg_exposure
+  - name: observability__stg_exposure
     config:
       meta:
         hidden: true
-  - name: stg_invocation
+  - name: observability__stg_invocation
     config:
       meta:
         hidden: true
-  - name: stg_metric
+  - name: observability__stg_metric
     config:
       meta:
         hidden: true
-  - name: stg_model
+  - name: observability__stg_model
     config:
       meta:
         hidden: true
-  - name: stg_seed
+  - name: observability__stg_seed
     config:
       meta:
         hidden: true
-  - name: stg_snapshot
+  - name: observability__stg_snapshot
     config:
       meta:
         hidden: true
-  - name: stg_source
+  - name: observability__stg_source
     config:
       meta:
         hidden: true
-  - name: stg_test
+  - name: observability__stg_test
     config:
       meta:
         hidden: true
